@@ -2,7 +2,7 @@
 
 
 【拉库】
-ql reo 
+ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|ql"
 
 
 ### 特别声明
@@ -21,6 +21,14 @@ ql reo
 ## 特别鸣谢:
 
 
-
-* [@xl2101200](https://github.com/xl2101200/-/)「Tom」
-* [@YaphetS0903](https://github.com/YaphetS0903/JStest/)「YaphetS0903」
+* [@NobyDa](https://github.com/NobyDa)「野比大佬」
+* [@lxk0301]「启蒙大佬」
+* [@MoonBegonia](https://github.com/MoonBegonia/ninja)「Ninja」
+* [@shufflewzc](https://github.com/shufflewzc/faker2)「Faker2」
+* [@shufflewzc](https://github.com/shufflewzc/faker3)「Faker3纯净版」
+* [@Ariszy](https://github.com/Ariszy/Private-Script)
+* [@smiek2221](https://github.com/smiek2221/scripts)「青蛙」
+* [@Aaron-lv](https://github.com/Aaron-lv/sync)「小小」
+* [@passerby-b](https://github.com/passerby-b/JDDJ)「京东到家」
+* [@Zy143L](https://github.com/Zy143L/wskey)「wskey」
+* [@ccwav](https://github.com/ccwav/QLScript2)「京东资产变动」
