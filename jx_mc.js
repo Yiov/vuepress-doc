@@ -1,6 +1,6 @@
 /*
 京喜牧场
-更新时间：2021-11-2
+更新时间：2021-11-7
 活动入口：京喜APP-我的-京喜牧场
 温馨提示：请先手动完成【新手指导任务】再运行脚本
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -30,12 +30,10 @@ const $ = new Env('京喜牧场');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //京喜APP的UA。领取助力任务奖励需要京喜APP的UA,环境变量：JX_USER_AGENT，有能力的可以填上自己的UA
-const JXUserAgent = $.isNode() ? (process.env.JX_USER_AGENT ? process.env.JX_USER_AGENT : ``) : ``;
 $.inviteCodeList = [];
 let cookiesArr = [];
 let UA, token, UAInfo = {}
 $.appId = 10028;
-$.helpCkList = [];
 let cardinfo = {
   "16": "小黄鸡",
   "17": "辣子鸡",
@@ -80,7 +78,7 @@ if ($.isNode()) {
     return;
   }
   console.log('京喜牧场\n' +
-    '更新时间：2021-10-30\n' +
+    '更新时间：2021-11-7\n' +
     '活动入口：京喜APP-我的-京喜牧场\n' +
     '温馨提示：请先手动完成【新手指导任务】再运行脚本')
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -105,6 +103,8 @@ if ($.isNode()) {
     await pasture();
     await $.wait(2000);
   }
+  
+  //await shareCodesFormat()
   
 })()
   .catch((e) => {
@@ -151,15 +151,12 @@ async function pasture() {
       }
       console.log('获取活动信息成功');
       console.log(`互助码：${$.homeInfo.sharekey}`);
-      $.helpCkList.push($.cookie);
-      $.inviteCodeList.push(
-        {
-          'use': $.UserName,
-          'code': $.homeInfo.sharekey,
-          'max': false
-        }
-      );
-      await $.wait(2000)
+      $.taskList = [], $.dateType = ``, $.source = `jxmc`, $.bizCode = `jxmc`;
+      await takeGetRequest('GetUserTaskStatusList');
+      for (let key of Object.keys($.taskList)) {
+        let vo = $.taskList[key]
+        
+      }
       const petNum = ($.homeInfo?.petinfo || []).length
       await takeGetRequest('GetCardInfo');
       if ($.GetCardInfo && $.GetCardInfo.cardinfo) {
@@ -232,14 +229,14 @@ async function pasture() {
       for (let j = 0; j < signList.length; j++) {
         if (signList[j].fortoday && !signList[j].hasdone) {
           await $.wait(2000);
-          console.log(`去签到`);
+          console.log(`\n去签到`);
           await takeGetRequest('GetSignReward');
         }
       }
     }
     await $.wait(2000);
     if ($.crowInfo.lastgettime) {
-      console.log('收奶牛金币');
+      console.log('\n收奶牛金币');
       await takeGetRequest('cow');
       await $.wait(2000);
     }
@@ -255,10 +252,7 @@ async function pasture() {
         }
       }
     }
-    $.taskList = [];
-    $.dateType = ``;
-    $.source = `jxmc`;
-    $.bizCode = `jxmc`;
+    $.taskList = [], $.dateType = ``, $.source = `jxmc`, $.bizCode = `jxmc`;
     for (let j = 2; j >= 0; j--) {
       if (j === 0) {
         $.dateType = ``;
@@ -296,15 +290,14 @@ async function pasture() {
         }
       }
     }
-    $.taskList = [];
-    $.dateType = `2`;
-    $.source = `jxmc_zanaixin`;
-    $.bizCode = `jxmc_zanaixin`;
-    for (let j = 2; j >= 0; j--) {
-      await takeGetRequest('GetUserTaskStatusList');
-      await $.wait(2000);
-      await doTask(j);
-      await $.wait(2000);
+    if ($.GetUserLoveInfo) {
+      $.taskList = [], $.dateType = `2`, $.source = `jxmc_zanaixin`, $.bizCode = `jxmc_zanaixin`;
+      for (let j = 2; j >= 0; j--) {
+        await takeGetRequest('GetUserTaskStatusList');
+        await $.wait(2000);
+        await doTask(j);
+        await $.wait(2000);
+      }
     }
 
     await takeGetRequest('GetHomePageInfo');
@@ -442,8 +435,9 @@ async function takeGetRequest(type) {
   let myRequest = ``;
   switch (type) {
     case 'GetHomePageInfo':
-      url = `https://m.jingxi.com/jxmc/queryservice/GetHomePageInfo?channel=7&sceneid=1001&activeid=null&activekey=${$.activekey}&isgift=1&isquerypicksite=1&_stk=channel%2Csceneid&_ste=1`;
-      url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
+      url = `https://m.jingxi.com/jxmc/queryservice/GetHomePageInfo?channel=7&sceneid=1001&activeid=null&activekey=${$.activekey}&isgift=1&isquerypicksite=1`;
+      url += `&_stk=${getStk(url)}`;
+      url += `&_ste=1&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
       myRequest = getGetRequest(`GetHomePageInfo`, url);
       break;
     case 'GetUserTaskStatusList':
@@ -501,7 +495,7 @@ async function takeGetRequest(type) {
       myRequest = getGetRequest(`GetEgg`, url);
       break;
     case 'help':
-      url = `https://m.jingxi.com/jxmc/operservice/EnrollFriend?sharekey=${$.oneCodeInfo.code}&channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}&_stk=channel%2Csceneid%2Csharekey&_ste=1`;
+      url = `https://m.jingxi.com/jxmc/operservice/EnrollFriend?sharekey=${$.code}&channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}&_stk=channel%2Csceneid%2Csharekey&_ste=1`;
       url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
       myRequest = getGetRequest(`help`, url);
       break;
@@ -526,8 +520,9 @@ async function takeGetRequest(type) {
       myRequest = getGetRequest(`GetSignReward`, url);
       break;
     case 'DoMainTask':
-      url = `https://m.jingxi.com/jxmc/operservice/DoMainTask?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&step=${$.step}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}&_stk=activeid%2Cactivekey%2Cchannel%2Cjxmc_jstoken%2Cphoneid%2Csceneid%2Cstep%2Ctimestamp&_ste=1`
-      url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
+      url = `https://m.jingxi.com/jxmc/operservice/DoMainTask?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&step=${$.step}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}`;
+      url += `&_stk=${getStk(url)}`;
+      url += `&_ste=1&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
       myRequest = getGetRequest(`DoMainTask`, url);
       break;
     case 'GetCardInfo':
@@ -698,14 +693,22 @@ function dealReturn(type, data) {
       break;
     case 'help':
       data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
-      if (data.ret === 0 && data.data.result === 0) {
-        console.log(`助力成功`);
-      } else if (data.ret === 0 && data.data.result === 4) {
-        console.log(`助力次数已用完 或者已助力`);
-        //$.canHelp = false;
-      } else if (data.ret === 0 && data.data.result === 5) {
-        console.log(`助力已满`);
-        $.oneCodeInfo.max = true;
+      if (data.ret === 0) {
+        if (data.data.result === 0) {
+          console.log(`助力成功`);
+        } else if (data.data.result === 1) {
+          console.log(`不能助力自己`);
+        } else if (data.data.result === 4) {
+          console.log(`助力次数已用完`);
+          $.canHelp = false;
+        } else if (data.data.result === 5) {
+          console.log(`已经助力过此好友`);
+        } else {
+          console.log(JSON.stringify(data))
+        }
+      } else if (data.ret === 1016) {
+        console.log(`活动太火爆了，还是去买买买吧~`);
+        $.canHelp = false;
       } else {
         console.log(JSON.stringify(data))
       }
@@ -752,6 +755,8 @@ function dealReturn(type, data) {
       if (data.ret === 0) {
         if (data.data.prizetype === 1) {
           console.log(`抽奖获得：1张${cardinfo[data.data.cardtype]}卡片`)
+        } else if (data.data.prizetype === 2) {
+          console.log(`抽奖获得：${data.data.rewardinfo.prizevalue / 100}红包`)
         } else if (data.data.prizetype === 3) {
           console.log(`抽奖获得：${data.data.addcoins}金币`)
         } else {
@@ -796,9 +801,6 @@ function dealReturn(type, data) {
   }
 }
 function getGetRequest(type, url) {
-  if (JXUserAgent) {
-    UA = JXUserAgent;
-  }
   const method = `GET`;
   let headers = {
     "Host": "m.jingxi.com",
@@ -818,6 +820,11 @@ function randomString(e) {
     n += t.charAt(Math.floor(Math.random() * a));
   return n
 }
+
+
+
+
+
 
 function decrypt(time, stk, type, url) {
   stk = stk || (url ? getUrlData(url, '_stk') : '')
