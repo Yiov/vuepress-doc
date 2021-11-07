@@ -42,10 +42,10 @@ const JD_API_HOST = 'https://api.m.jd.com/', actCode = 'visa-card-001';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('京东极速版 赚金币\n' +
+  console.log('京东极速版赚金币\n' +
       '活动时间：-\n' +
       '活动地址：-\n' +
-      '活动入口：京东极速版app-百元生活费');
+      '活动入口：京东极速版app-底部 百元生活费');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -109,62 +109,7 @@ function showMsg() {
   })
 }
 
-async function signInit() {
-  return new Promise(resolve => {
-    $.get(taskUrl('speedSignInit', {
-      "activityId": "8a8fabf3cccb417f8e691b6774938bc2",
-      "kernelPlatform": "RN",
-      "inviterId":""
-    }), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-          if (safeGet(data)) {
-            data = JSON.parse(data);
-            //console.log(data)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
 
-async function sign() {
-  return new Promise(resolve => {
-    $.get(taskUrl('speedSign', {
-        "kernelPlatform": "RN",
-        "activityId": "8a8fabf3cccb417f8e691b6774938bc2",
-        "noWaitPrize": "false"
-      }),
-      async (err, resp, data) => {
-        try {
-          if (err) {
-            console.log(`${JSON.stringify(err)}`)
-            console.log(`${$.name} API请求失败，请检查网路重试`)
-          } else {
-            if (safeGet(data)) {
-              data = JSON.parse(data);
-              if (data.subCode === 0) {
-                console.log(`签到获得${data.data.signAmount}现金，共计获得${data.data.cashDrawAmount}`)
-              } else {
-                console.log(`签到失败，${data.msg}`)
-              }
-            }
-          }
-        } catch (e) {
-          $.logErr(e, resp)
-        } finally {
-          resolve(data);
-        }
-      })
-  })
-}
 
 async function taskList() {
   return new Promise(resolve => {
