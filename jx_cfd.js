@@ -1,7 +1,7 @@
 /*
 京喜财富岛
 cron 1 * * * * jd_cfd.js
-更新时间：2021-11-2
+更新时间：2021-11-7
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -58,7 +58,7 @@ if ($.isNode()) {
   console.log('京喜财富岛\n' +
       '活动时间：-\n' +
       '活动地址：-\n' +
-      '活动入口：京东APP首页搜：玩一玩');
+      '活动入口：京喜app-财富岛');
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   await requestAlgo();
   await $.wait(1000)
@@ -1013,7 +1013,6 @@ function createbuilding(body, buildNmae) {
 
 
 
-
 // 获取用户信息
 function getUserInfo(showInvite = true) {
   return new Promise(async (resolve) => {
@@ -1398,6 +1397,7 @@ function taskListUrl(function_path, body = '', bizCode = 'jxbfd') {
       "Host": "m.jingxi.com",
       "Accept": "*/*",
       "Accept-Encoding": "gzip, deflate, br",
+      "User-Agent": UA,
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "Referer": "https://st.jingxi.com/",
       "Cookie": cookie
@@ -1457,7 +1457,7 @@ function readShareCode() {
         resolve(data);
       }
     })
-    await $.wait(10000);
+    await $.wait(30 * 1000);
     resolve()
   })
 }
@@ -1582,6 +1582,7 @@ async function requestAlgo() {
               $.token = data.data.result.tk;
               let enCryptMethodJDString = data.data.result.algo;
               if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
+              console.log(`获取签名参数成功！`)
               
             } else {
               
