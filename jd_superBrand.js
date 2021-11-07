@@ -1,7 +1,7 @@
 /*
 双11特务
 APP首页下滑,任务，互助
-cron 10 9,13,16,19,20 2-8 11 * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_superBrand.js
+cron 10 9,13,15,16,19,20 2-8 11 * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_superBrand.js
 * */
 const $ = new Env('特物Z');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -52,16 +52,24 @@ let shareList = [];
             }
         }
     }
-    
-    
+    if(shareList.length === 0){return;}
+    let allShareList = [];
+    for (let i = 0; i < cookiesArr.length; i++) {
+        let cookie = cookiesArr[i];
+        let userName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1]);
+        for (let j = 0; j < shareList.length; j++) {
+            if(shareList[j].user === userName){
+                allShareList.push(shareList[j]);
+                break;
+            }
+        }
+    }
     
 })().catch((e) => {
     $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
 }).finally(() => {
     $.done();
 });
-
-
 
 async function main(cookie) {
     let userName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1]);
@@ -157,7 +165,7 @@ async function main(cookie) {
                         await $.wait(3000);
                     }
                 }
-            }else if(oneTask.assignmentName === '去首页下拉参与小游戏'){
+            }else if(oneTask.assignmentName.indexOf('小游戏') !== -1){
                 for (let j = 0; j < signList.length; j++) {
                     if(signList[j].status === 1){
                         console.log(`任务：${oneTask.assignmentName},去执行,请稍稍`);
