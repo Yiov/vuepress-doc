@@ -2,19 +2,31 @@
 
 
 【拉库】
-ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|ql"
+ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|sendNotify|ql"
 
 
-### 特别声明
-
-本仓库收集自各位大佬的脚本，会逐一@，脚本内也会标注
+拉好库后，有动手能力的，可以修改cron运行时间或者js脚本
 
 
-脚本更新时间：随缘
+Ps：本人也是第一次使用，仍还在学习中
 
 
 
-第一次使用，还在学习中
+### 一对一推送使用
+
+使用的是[@ccwav]大佬的脚本，必备ql.js和sendNotify.js
+
+然后配合CK_WxPusherUid.json的推送模板即可
+
+由于拉库无法拉取json文件，请再/root/ql/repo/Yiov_dogeast文件夹找到CK_WxPusherUid.json，
+复制，然后到/root/ql/scripts粘贴一份到这里
+
+右键编辑打开CK_WxPusherUid.json，按格式填入pin和Uid
+
+Wxpusher的Uid获取
+https://wxpusher.zjiecode.com/docs/
+
+
 
 
 
