@@ -1,6 +1,6 @@
 /*
 京喜牧场
-更新时间：2021-11-7
+更新时间：2021-11-8
 活动入口：京喜APP-我的-京喜牧场
 温馨提示：请先手动完成【新手指导任务】再运行脚本
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -691,28 +691,7 @@ function dealReturn(type, data) {
         console.log(`执行任务成功`);
       }
       break;
-    case 'help':
-      data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
-      if (data.ret === 0) {
-        if (data.data.result === 0) {
-          console.log(`助力成功`);
-        } else if (data.data.result === 1) {
-          console.log(`不能助力自己`);
-        } else if (data.data.result === 4) {
-          console.log(`助力次数已用完`);
-          $.canHelp = false;
-        } else if (data.data.result === 5) {
-          console.log(`已经助力过此好友`);
-        } else {
-          console.log(JSON.stringify(data))
-        }
-      } else if (data.ret === 1016) {
-        console.log(`活动太火爆了，还是去买买买吧~`);
-        $.canHelp = false;
-      } else {
-        console.log(JSON.stringify(data))
-      }
-      break;
+    
     case 'GetVisitBackInfo':
       data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
       if (data.ret === 0) {
@@ -820,7 +799,6 @@ function randomString(e) {
     n += t.charAt(Math.floor(Math.random() * a));
   return n
 }
-
 
 
 
