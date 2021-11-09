@@ -1,13 +1,10 @@
 [
   {
-    "pt_pin": "", //里面填账号1的pin
-    "Uid": "" //里面填账号1的UID
-     /* 从wxplsher获取 https://wxpusher.zjiecode.com/docs/ */
+    "pt_pin": "jd_******",
+    "Uid": "UID_**********"
   },
   {
-    "pt_pin": "", //里面填账号2的pin
-    "Uid": ""//里面填账号2的UID
-     /* 从wxplsher获取 https://wxpusher.zjiecode.com/docs/ */
-  },
- // 多账号复制了，以此类推
+    "pt_pin": "jd_******",
+    "Uid": "UID_**********"
+  }
 ]
