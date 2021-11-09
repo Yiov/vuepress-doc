@@ -17,7 +17,7 @@ cron "40 0,2 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/
 ============小火箭=========
 众筹许愿池 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_wish.js, cronexpr="40 0,2 * * *", timeout=3600, enable=true
  */
-const $ = new Env('众筹许愿池/惊喜大作战/荣耀钞能力/1111点心动/好物好生活');
+const $ = new Env('众筹许愿池/惊喜大作战/荣耀钞能力/1111点心动/好物好生活/焕新带电生活');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -25,8 +25,8 @@ let message = '', allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1E1NXxq0', '1FV1VwKc', '1FFRWxaY', '1FFVQyqw', '1FV1ZwKY'];
-let appNameArr = ['众筹许愿池', '惊喜大作战', '荣耀钞能力', '1111点心动', '好物好生活'];
+let appIdArr = ['1E1NXxq0', '1FV1VwKc', '1FFRWxaY', '1FFVQyqw', '1FV1ZwKY', '1FFdSxqw'];
+let appNameArr = ['众筹许愿池', '惊喜大作战', '荣耀钞能力', '1111点心动', '好物好生活', '焕新带电生活'];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
@@ -42,7 +42,7 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('众筹许愿池/惊喜大作战/荣耀钞能力/1111点心动/好物好生活\n' +
+  console.log('众筹许愿池/惊喜大作战/荣耀钞能力/1111点心动/好物好生活/焕新带电生活\n' +
       '活动时间：-\n' +
       '抽奖限制：-\n' +
       '活动入口：京东APP首页搜：玩一玩');
@@ -72,6 +72,11 @@ if ($.isNode()) {
       }
     }
   }
+  if (allMessage) {
+    if ($.isNode()) await notify.sendNotify($.name, allMessage);
+    $.msg($.name, '', allMessage)
+  }
+  
   
   
 })()
@@ -101,6 +106,7 @@ async function jd_wish() {
       await interact_template_getLotteryResult()
       await $.wait(2000)
     }
+    if (message) allMessage += `京东账号${$.index} ${$.nickName || $.UserName}\n${appName}\n${message}${$.index !== cookiesArr.length ? '\n\n' : ''}`
 
   } catch (e) {
     $.logErr(e)
@@ -125,14 +131,17 @@ async function healthyDay_getHomeData(type = true) {
                     console.log(`签到`)
                     await harmony_collectScore({"appId":appId,"taskToken":vo.simpleRecordInfoVo.taskToken,"taskId":vo.taskId,"actionType":"0"}, vo.taskType)
                   } else if (vo.taskType === 1) {
+                    $.complete = false;
                     for (let key of Object.keys(vo.followShopVo)) {
                       let followShopVo = vo.followShopVo[key]
                       if (followShopVo.status !== 2) {
                         console.log(`【${followShopVo.shopName}】${vo.subTitleName}`)
                         await harmony_collectScore({"appId":appId,"taskToken":followShopVo.taskToken,"taskId":vo.taskId,"actionType":"0"})
+                        if ($.complete) break;
                       }
                     }
                   } else if (vo.taskType === 8) {
+                    $.complete = false;
                     for (let key of Object.keys(vo.productInfoVos)) {
                       let productInfoVos = vo.productInfoVos[key]
                       if (productInfoVos.status !== 2) {
@@ -140,9 +149,11 @@ async function healthyDay_getHomeData(type = true) {
                         await harmony_collectScore({"appId":appId,"taskToken":productInfoVos.taskToken,"taskId":vo.taskId,"actionType":"1"})
                         await $.wait(vo.waitDuration * 1000)
                         await harmony_collectScore({"appId":appId,"taskToken":productInfoVos.taskToken,"taskId":vo.taskId,"actionType":"0"})
+                        if ($.complete) break;
                       }
                     }
                   } else if (vo.taskType === 9 || vo.taskType === 26) {
+                    $.complete = false;
                     for (let key of Object.keys(vo.shoppingActivityVos)) {
                       let shoppingActivityVos = vo.shoppingActivityVos[key]
                       if (shoppingActivityVos.status !== 2) {
@@ -152,6 +163,7 @@ async function healthyDay_getHomeData(type = true) {
                           await $.wait(vo.waitDuration * 1000)
                         }
                         await harmony_collectScore({"appId":appId,"taskToken":shoppingActivityVos.taskToken,"taskId":vo.taskId,"actionType":"0"})
+                        if ($.complete) break;
                       }
                     }
                   } else if (vo.taskType === 14) {
@@ -206,6 +218,7 @@ function harmony_collectScore(body = {}, taskType = '') {
                 if (data.data.bizCode === 103) $.delcode = true
               } else {
                 console.log(body.actionType === "0" ? `完成任务失败：${data.data.bizMsg}\n` : data.data.bizMsg)
+                if (data.data.bizMsg === "任务已完成") $.complete = true;
               }
             }
           }
@@ -228,14 +241,17 @@ function interact_template_getLotteryResult() {
         } else {
           if (safeGet(data)) {
             data = JSON.parse(data);
-            let userAwardsCacheDto = data && data.data && data.data.result && data.data.result.userAwardsCacheDto
+            let userAwardsCacheDto = data && data.data && data.data.result && data.data.result.userAwardsCacheDto;
             if (userAwardsCacheDto) {
               if (userAwardsCacheDto.type === 2) {
-                console.log(`抽中：${userAwardsCacheDto.jBeanAwardVo.quantity}${userAwardsCacheDto.jBeanAwardVo.ext || `京豆`}`)
+                console.log(`抽中：${userAwardsCacheDto.jBeanAwardVo.quantity}${userAwardsCacheDto.jBeanAwardVo.ext || `京豆`}`);
               } else if (userAwardsCacheDto.type === 0) {
                 console.log(`很遗憾未中奖~`)
+              } else if (userAwardsCacheDto.type === 1) {
+                console.log(`抽中：${userAwardsCacheDto.couponVo.prizeName}，金额${userAwardsCacheDto.couponVo.usageThreshold}-${userAwardsCacheDto.couponVo.quota}，使用时间${userAwardsCacheDto.couponVo.useTimeRange}`);
               } else {
-                console.log(JSON.stringify(data))
+                console.log(`抽中：${JSON.stringify(data)}`);
+                message += `抽中：${JSON.stringify(data)}\n`;
               }
             } else {
               $.canLottery = false
