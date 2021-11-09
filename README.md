@@ -12,18 +12,19 @@ Ps：本人也是第一次使用，仍还在学习中
 
 
 
-### 一对一推送使用
+## 一对一推送使用
 
-使用的是[@ccwav]大佬的脚本，必备ql.js和sendNotify.js
+使用的是 @ccwav 大佬的脚本，必备ql.js和sendNotify.js
 
 然后配合CK_WxPusherUid.json的推送模板即可
 
 由于拉库无法拉取json文件，请再/root/ql/repo/Yiov_dogeast文件夹找到CK_WxPusherUid.json，
-复制，然后到/root/ql/scripts粘贴一份到这里
+复制，然后进入到/root/ql/scripts粘贴
 
 右键编辑打开CK_WxPusherUid.json，按格式填入pin和Uid
 
 Wxpusher的Uid获取
+
 https://wxpusher.zjiecode.com/docs/
 
 
