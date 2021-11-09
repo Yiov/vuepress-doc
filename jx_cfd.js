@@ -1,7 +1,7 @@
 /*
 京喜财富岛
 cron 1 * * * * jd_cfd.js
-更新时间：2021-11-7
+更新时间：2021-11-9
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -282,9 +282,17 @@ function GetPropCardCenterInfo() {
                   break;
                 }
               }
-              if (!$.canuse) console.log(`无可用道具卡\n`)
+              for (let key of Object.keys(data.cardInfo.richcard)) {
+                let vo = data.cardInfo.richcard[key]
+                if (vo.dwCardNums > 0) {
+                  $.canuse = true;
+                  await UsePropCard(vo.strCardTypeIndex)
+                  break;
+                }
+              }
+              if (!$.canuse) console.log(`无可用道具卡`)
             } else {
-              console.log(`有在使用中的道具卡，跳过使用\n`)
+              console.log(`有在使用中的道具卡，跳过使用`)
             }
           }
         }
@@ -308,9 +316,9 @@ function UsePropCard(strCardTypeIndex) {
           data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
           if (data.iRet === 0) {
             let cardName = strCardTypeIndex.split("_")[1];
-            console.log(`使用道具卡【${cardName}】成功\n`)
+            console.log(`使用道具卡【${cardName}】成功`)
           } else {
-            console.log(`使用道具卡失败：${JSON.stringify(data)}\n`)
+            console.log(`使用道具卡失败：${JSON.stringify(data)}`)
           }
         }
       } catch (e) {
@@ -598,7 +606,7 @@ async function getTakeAggrPage(type) {
               console.log(`${$.name} GetTakeAggrPage API请求失败，请检查网路重试`)
             } else {
               data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
-              console.log(`领助力奖励`)
+              console.log(`\n领助力奖励`)
               let helpNum = []
               for (let key of Object.keys(data.Data.Employee.EmployeeList)) {
                 let vo = data.Data.Employee.EmployeeList[key]
@@ -1010,6 +1018,8 @@ function createbuilding(body, buildNmae) {
     })
   })
 }
+
+
 
 
 
@@ -1447,7 +1457,7 @@ function readShareCode() {
           console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            
+            console.log(`\n随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
             data = JSON.parse(data);
           }
         }
