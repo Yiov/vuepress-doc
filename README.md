@@ -24,8 +24,9 @@ Ps：本人也是第一次使用，仍还在学习中
 
 然后配合CK_WxPusherUid.json的推送模板即可
 
-    由于拉库无法拉取json文件，请再/root/ql/repo/Yiov_dogeast文件夹找到CK_WxPusherUid.json，
-复制，然后进入到/root/ql/scripts粘贴
+    由于拉库无法拉取json文件，请在/root/ql/repo/Yiov_dogeast文件夹找到CK_WxPusherUid.json
+
+复制 ，然后进入到/root/ql/scripts 粘贴
 
 右键编辑打开CK_WxPusherUid.json，按格式填入pin和Uid
 
