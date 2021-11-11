@@ -1,9 +1,9 @@
 /*
 * 活动：APP - 京东超市 - 限时抢京豆
 * 第一个CK助力作者，其他CK助力第一个CK
-cron 23 7,9 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_xsqjd.js
+cron 23 7,9 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_xsljd.js
 * */
-const $ = new Env('限时抢京豆10.20-11.20');
+const $ = new Env('限时抢京豆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [];
 if ($.isNode()) {
@@ -35,11 +35,9 @@ let autoCode = '',projectId = '',helpId = '';
         console.log(`活动结束`);
         return;
     }
-    let res = [];
     
-    if(res.length > 0){
-        autoCode = getRandomArrayElements(res,1)[0];
-    }
+    
+    
     mainPin = decodeURIComponent(cookiesArr[0].match(/pt_pin=(.+?);/) && cookiesArr[0].match(/pt_pin=(.+?);/)[1])
     if(cookiesArr.length>0){
         const promiseArr = cookiesArr.map((ck, index) => main(ck));
@@ -49,6 +47,7 @@ let autoCode = '',projectId = '',helpId = '';
         return ;
     }
     
+    await $.wait(2000);
     if(cookiesArr.length>0){
         const promiseArr = cookiesArr.map((ck, index) => main(ck));
         await Promise.all(promiseArr);
@@ -86,9 +85,9 @@ async function main(ck){
             if(JSON.stringify(ownCode) === '{}' && mainPin === userName){
                 ownCode = {'user':userName,'projectId':projectId,'assignmentId':oneTask.assignmentId,"itemId":oneTask.assistId,'type':2}
             }
-            if(!helpId){
-                helpId = oneTask.assignmentId;
-            }
+            //if(!helpId){
+            //    helpId = oneTask.assignmentId;
+            //}
         }
         if(oneTask.type === '3' || oneTask.type === '6'){
             console.log(`${userName},任务：${oneTask.assignmentName},已完成：${oneTask.completionCnt}次，需要完成：${oneTask.assignmentTimesLimit}次`);
@@ -154,7 +153,39 @@ async function takeRequest(functionId,body,ck){
     })
 }
 
-
+function getAuthorShareCode(url) {
+    return new Promise(resolve => {
+        const options = {
+            url: `${url}?${new Date()}`, "timeout": 10000, headers: {
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+            }
+        };
+        if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
+            const tunnel = require("tunnel");
+            const agent = {
+                https: tunnel.httpsOverHttp({
+                    proxy: {
+                        host: process.env.TG_PROXY_HOST,
+                        port: process.env.TG_PROXY_PORT * 1
+                    }
+                })
+            }
+            Object.assign(options, { agent })
+        }
+        $.get(options, async (err, resp, data) => {
+            try {
+                if (err) {
+                } else {
+                    if (data) data = JSON.parse(data)
+                }
+            } catch (e) {
+                // $.logErr(e, resp)
+            } finally {
+                resolve(data);
+            }
+        })
+    })
+}
 
 function getRandomArrayElements(arr, count) {
     var shuffled = arr.slice(0), i = arr.length, min = i - count, temp, index;
