@@ -7,11 +7,13 @@ const $ = new Env("京东饭粒");
 cron:
 46 9 * * * jd_fanli.py
 """
+
+import sys
 import json
 import sys
-import os
 import time
 import re
+import os
 import requests
 import random
 
@@ -110,7 +112,7 @@ if __name__ == '__main__':
                 for times in range(count["maxTaskCount"] - count["finishCount"]):
                     tasks = getTaskList(ck)
                     for i in tasks:
-                        if i["statusName"] != "活动结束":
+                        if i["statusName"] != "活动结束" and i["statusName"] != "明日再来":
                             printf("开始做任务：" + i["taskName"])
                             uid, tt = saveTaskRecord(ck, i["taskId"], i["taskType"])
                             time.sleep(10)
