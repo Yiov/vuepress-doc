@@ -4,7 +4,6 @@
 // 手机设备在boxjs里填写cookie
 // boxjs订阅地址:https://gitee.com/passerby-b/javascript/raw/master/JD/passerby-b.boxjs.json
 //TG群:https://t.me/passerbyb2021
-//脚本来源：@passerby-b
 
 //[task_local]
 //7 */1 * * * https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_getPoints.js
@@ -13,12 +12,8 @@
 //[Script]
 //cron "7 */1 * * *" script-path=https://raw.githubusercontent.com/passerby-b/JDDJ/main/jddj_getPoints.js,tag=京东到家鲜豆庄园收水滴
 
-console.log('京东到家 鲜豆庄园 收水滴\n' +
-      '活动时间：-\n' +
-      '活动地址：-\n' +
-      '活动入口：京东APP首页-京东到家-我的-鲜豆庄园');
 
-const $ = new API("京东到家 鲜豆庄园 收水滴");
+const $ = new API("jddj_getPoints");
 let ckPath = './jdCookie.js';//ck路径,环境变量:JDDJ_CKPATH
 let cookies = [];
 let thiscookie = '', deviceid = '', nickname = '';
@@ -211,13 +206,17 @@ async function taskLoginUrl(thiscookie) {
                 let ckstr = '';
                 await $.http.get(option).then(async response => {
                     //console.log(response);
-                    if (response.body.indexOf('请求成功') > -1) {
+                    let body = JSON.parse(response.body);
+                    if (body.code == 0) {
                         for (const key in response.headers) {
                             if (key.toLowerCase().indexOf('cookie') > -1) {
                                 ckstr = response.headers[key].toString();
                             }
                         }
                         ckstr += ';deviceid_pdj_jd=' + deviceid;
+                    }
+                    else {
+                        console.log(body.msg);
                     }
                 });
                 resolve(ckstr);
