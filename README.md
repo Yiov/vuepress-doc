@@ -44,7 +44,7 @@ https://wxpusher.zjiecode.com/docs/
 * [@NobyDa](https://github.com/NobyDa)「野比大佬」
 * [@lxk0301]「启蒙大佬」
 * [@MoonBegonia](https://github.com/MoonBegonia/ninja)「Ninja」
-* [@Nolanhzy](https://github.com/NolanHzy)「Ninja」
+* [@Nolanhzy](https://github.com/NolanHzy)「Nvjdc」
 * [@shufflewzc](https://github.com/shufflewzc/faker2)「Faker2」
 * [@shufflewzc](https://github.com/shufflewzc/faker3)「Faker3纯净版」
 * [@smiek2221](https://github.com/smiek2221/scripts)「青蛙」
