@@ -17,7 +17,7 @@ cron "40 0,2 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/
 ============小火箭=========
 众筹许愿池 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_wish.js, cronexpr="40 0,2 * * *", timeout=3600, enable=true
  */
-const $ = new Env('众筹许愿池/惊喜大作战/荣耀钞能力/1111点心动/好物好生活/焕新带电生活');
+const $ = new Env('众筹许愿池');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
@@ -25,8 +25,8 @@ let message = '', allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1E1NXxq0', '1FV1VwKc', '1FFRWxaY', '1FFVQyqw', '1FV1ZwKY', '1FFdSxqw'];
-let appNameArr = ['众筹许愿池', '惊喜大作战', '荣耀钞能力', '1111点心动', '好物好生活', '焕新带电生活'];
+let appIdArr = ['1E1NXxq0'];
+let appNameArr = ['众筹许愿池'];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
@@ -42,10 +42,10 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('众筹许愿池/惊喜大作战/荣耀钞能力/1111点心动/好物好生活/焕新带电生活\n' +
+  console.log('众筹许愿池\n' +
       '活动时间：-\n' +
       '抽奖限制：-\n' +
-      '活动入口：京东APP首页搜：玩一玩');
+      '活动入口：京东AP-京东众筹-众筹许愿池');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
