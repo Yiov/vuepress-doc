@@ -1,7 +1,7 @@
 /*
 京喜财富岛
 cron 1 * * * * jd_cfd.js
-更新时间：2021-11-9
+更新时间：2021-11-14
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -1022,7 +1022,6 @@ function createbuilding(body, buildNmae) {
 
 
 
-
 // 获取用户信息
 function getUserInfo(showInvite = true) {
   return new Promise(async (resolve) => {
@@ -1448,29 +1447,6 @@ function showMsg() {
   });
 }
 
-function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `https://transfer.nz.lu/cfd`, timeout: 30 * 1000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err))
-          console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            console.log(`\n随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(30 * 1000);
-    resolve()
-  })
-}
 
 
 
