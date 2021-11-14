@@ -1,7 +1,7 @@
 /*
 京喜财富岛合成月饼
 cron 5 * * * * jd_cfd_mooncake.js
-更新时间：2021-9-11
+更新时间：2021-11-14
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -85,7 +85,7 @@ if ($.isNode()) {
     }
   }
   
-  
+ 
   //await shareCodesFormat()
   
   await showMsg();
@@ -174,25 +174,30 @@ async function composePearlState(type) {
               if (data.iRet === 0) {
                 console.log(`当前已合成${data.dwCurProgress}颗月饼，总计获得${data.ddwVirHb / 100}元红包`)
                 if (data.strDT) {
-                  let beacon = data.PearlList[0]
-                  data.PearlList.shift()
-                  let beaconType = beacon.type
-                  let num = Math.ceil(Math.random() * 12 + 12)
+                  // let num = Math.ceil(Math.random() * 12 + 12)
+                  let num = data.PearlList.length
+                  let div = Math.ceil(Math.random() * 4 + 2)
                   console.log(`合成月饼：模拟操作${num}次`)
                   for (let v = 0; v < num; v++) {
                     console.log(`模拟操作进度：${v + 1}/${num}`)
-                    await $.wait(2000)
-                    await realTmReport(data.strMyShareId)
+                    let beacon = data.PearlList[0]
+                    data.PearlList.shift()
+                    let beaconType = beacon.type
+                    if (v % div === 0){
+                      await realTmReport(data.strMyShareId)
+                      await $.wait(5000)
+                    }
                     if (beacon.rbf) {
                       let size = 1
-                      for (let key of Object.keys(data.PearlList)) {
-                        let vo = data.PearlList[key]
-                        if (vo.rbf && vo.type === beaconType) {
-                          size = 2
-                          vo.rbf = 0
-                          break
-                        }
-                      }
+                      // for (let key of Object.keys(data.PearlList)) {
+                      //   let vo = data.PearlList[key]
+                      //   if (vo.rbf && vo.type === beaconType) {
+                      //     data.PearlList.splice(key, 1)
+                      //     size = 2
+                      //     vo.rbf = 0
+                      //     break
+                      //   }
+                      // }
                       await composePearlAward(data.strDT, beaconType, size)
                     }
                   }
@@ -362,8 +367,45 @@ function pearlHelpDraw(ddwSeasonStartTm, dwUserId) {
   })
 }
 
-
-
+// 助力
+function helpByStage(shareCodes) {
+  return new Promise((resolve) => {
+    $.get(taskUrl(`user/PearlHelpByStage`, `__t=${Date.now()}&strShareId=${shareCodes}`), (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} helpbystage API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
+          if (data.iRet === 0 || data.sErrMsg === 'success') {
+            console.log(`助力成功：获得${data.GuestPrizeInfo.strPrizeName}`)
+          } else if (data.iRet === 2235 || data.sErrMsg === '今日助力次数达到上限，明天再来帮忙吧~') {
+            console.log(`助力失败：${data.sErrMsg}`)
+            $.canHelp = false
+          } else if (data.iRet === 2232 || data.sErrMsg === '分享链接已过期') {
+            console.log(`助力失败：${data.sErrMsg}`)
+            $.delcode = true
+          } else if (data.iRet === 9999 || data.sErrMsg === '您还没有登录，请先登录哦~') {
+            console.log(`助力失败：${data.sErrMsg}`)
+            $.canHelp = false
+          } else if (data.iRet === 2229 || data.sErrMsg === '助力失败啦~') {
+            console.log(`助力失败：您的账号已黑`)
+            $.canHelp = false
+          } else if (data.iRet === 2190 || data.sErrMsg === '达到助力上限') {
+            console.log(`助力失败：${data.sErrMsg}`)
+            $.delcode = true
+          } else {
+            console.log(`助力失败：${data.sErrMsg}`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
 
 
 // 获取用户信息
@@ -539,29 +581,7 @@ function showMsg() {
   });
 }
 
-function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `http://transfer.nz.lu/cfd`, timeout: 10000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err))
-          console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            console.log(`\n随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(10000);
-    resolve()
-  })
-}
+
 
 
 function TotalBean() {
