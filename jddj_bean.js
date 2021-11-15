@@ -13,11 +13,6 @@ cron "10 0 * * *" script-path=https://raw.githubusercontent.com/passerby-b/JDDJ/
 
 */
 
-console.log('京东到家 赚鲜豆\n' +
-      '活动时间：-\n' +
-      '活动地址：-\n' +
-      '活动入口：京东APP首页-京东到家-我的-签到有惊喜-赚鲜豆');
-
 const $ = new API("jddj_bean");
 let ckPath = './jdCookie.js';//ck路径,环境变量:JDDJ_CKPATH
 let cookies = [];
