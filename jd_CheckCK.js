@@ -1,5 +1,9 @@
 /*
 cron "30 * * * *" jd_CheckCK.js, tag:京东CK检测by-ccwav
+
+新增失效后温馨提示 &表示换行
+例子：
+export CHECKCK_ALLNOTIFY="可以尝试访问下面网站自助登录：&http://xxx.com:5700"
  */
 //详细说明参考 https://github.com/ccwav/QLScript2.
 const $ = new Env('京东CK检测');
