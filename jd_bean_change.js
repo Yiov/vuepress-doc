@@ -60,7 +60,15 @@ let Today = new Date();
 let strAllNotify="";
 let llPetError=false;
 let RemainMessage = '\n';
-
+RemainMessage += "⭕提醒:⭕" + '\n';
+RemainMessage += '【极速金币】京东极速版->我的->金币(极速版使用)\n';
+RemainMessage += '【京东赚赚】微信->京东赚赚小程序->底部赚好礼->提现无门槛红包(京东使用)\n';
+RemainMessage += '【京东秒杀】京东->中间频道往右划找到京东秒杀->中间点立即签到->兑换无门槛红包(京东使用)\n';
+RemainMessage += '【东东萌宠】京东->我的->东东萌宠,完成是京东红包,可以用于京东app的任意商品\n';
+RemainMessage += '【领现金】京东->我的->东东萌宠->领现金(微信提现+京东红包)\n';
+RemainMessage += '【东东农场】京东->我的->东东农场,完成是京东红包,可以用于京东app的任意商品\n';
+RemainMessage += '【京喜工厂】京喜->我的->京喜工厂,完成是商品红包,用于购买指定商品(不兑换会过期)\n';
+RemainMessage += '【其他】京喜红包只能在京喜使用,其他同理';
 
 let WP_APP_TOKEN_ONE = "";
 let TempBaipiao = "";
@@ -93,9 +101,10 @@ if ($.isNode() && process.env.BEANCHANGE_USERGP4) {
 if ($.isNode() && process.env.BEANCHANGE_DISABLECASH) {
 	DisableCash = process.env.BEANCHANGE_DISABLECASH;
 }
-if ($.isNode() && process.env.BEANCHANGE_ENABLEMONTH) {
-	EnableMonth = process.env.BEANCHANGE_ENABLEMONTH;
-}
+//取消月结查询
+//if ($.isNode() && process.env.BEANCHANGE_ENABLEMONTH) {
+	//EnableMonth = process.env.BEANCHANGE_ENABLEMONTH;
+//}
 if ($.isNode() && process.env.BEANCHANGE_ALLNOTIFY) {
 	
 	var strTempNotify=process.env.BEANCHANGE_ALLNOTIFY ? process.env.BEANCHANGE_ALLNOTIFY.split('&') : [];
@@ -1526,7 +1535,10 @@ function cash() {
 				} else {
 					if (safeGet(data)) {
 						data = JSON.parse(data);
-						$.JDtotalcash = data.data.goldBalance;
+						if (data.data.goldBalance)
+							$.JDtotalcash = data.data.goldBalance;
+						else
+							console.log(`领现金查询失败，服务器没有返回具体值.`)
 					}
 				}
 			} catch (e) {
