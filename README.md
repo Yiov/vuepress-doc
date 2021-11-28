@@ -40,9 +40,9 @@ https://wxpusher.zjiecode.com/docs/
 
 ## 特别鸣谢:
 
-
+* [@whyour](https://github.com/whyour/qinglong)「青龙」
 * [@NobyDa](https://github.com/NobyDa)「野比大佬」
-* [@lxk0301]「启蒙大佬」
+* [@lxk0301]「lxk大佬」
 * [@MoonBegonia](https://github.com/MoonBegonia/ninja)「Ninja」
 * [@Nolanhzy](https://github.com/NolanHzy)「Nvjdc」
 * [@shufflewzc](https://github.com/shufflewzc/faker2)「Faker2」
@@ -52,3 +52,4 @@ https://wxpusher.zjiecode.com/docs/
 * [@passerby-b](https://github.com/passerby-b/JDDJ)「京东到家」
 * [@ccwav](https://github.com/ccwav/QLScript2)「京东资产变动」
 * [@Ariszy](https://github.com/Ariszy/Private-Script)
+* [@mmnvnmm](https://github.com/mmnvnmm/omo)「冲鸭」
