@@ -2,7 +2,7 @@
 5G超级盲盒，可抽奖获得京豆，建议在凌晨0点时运行脚本，白天抽奖基本没有京豆，4小时运行一次收集热力值
 活动地址: https://blindbox5g.jd.com
 活动时间：2021-06-2到2021-07-31
-更新时间：2021-06-3 12:00
+更新时间：2021-12-1
 脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
 =================================Quantumultx=========================
 [task_local]
@@ -23,7 +23,7 @@ const $ = new Env('5G超级盲盒');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
+let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message, allMessage = '';
 if ($.isNode()) {
@@ -45,9 +45,10 @@ $.shareId = [];
   }
   console.log('5G超级盲盒，可抽奖获得京豆，建议在凌晨0点时运行脚本，白天抽奖基本没有京豆，3小时运行一次收集热力值\n' +
       '活动地址: https://blindbox5g.jd.com\n' +
-      '活动时间：2021-8-2到2021-10-29\n' +
-      '更新时间：2021-8-8 19:00');
-  
+      '活动时间：-\n' +
+      '更新时间：-');
+ 
+  //await getShareCode()
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -66,11 +67,12 @@ $.shareId = [];
         }
         continue
       }
-      //await shareUrl();
+      await shareUrl();
       await getCoin();//领取每三小时自动生产的热力值
       await Promise.all([
         task0()
       ])
+      $.taskList_limit = 0
       await taskList();
       await getAward();//抽奖
     }
@@ -178,6 +180,7 @@ function getCoin() {
 }
 
 async function taskList() {
+  $.taskList_limit++
   return new Promise(async (resolve) => {
     const body = {"apiMapping":"/active/taskList"}
     $.post(taskurl(body), async (err, resp, data) => {
@@ -206,13 +209,21 @@ async function taskList() {
             await taskCoin(task2.type);
             await $.wait(2000)
           }
-          
+          // if (task5.finishNum < task5.totalNum) {
+          //   console.log(`\n\n分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
+          // } else {
+          //   console.log(`\n\n分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
+          // }
           if (task4.state === 2 && task1.state === 2 && task2.state === 2) {
             console.log('\n\n----taskList的任务全部做完了---\n\n')
             console.log(`分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
           } else {
-            console.log(`请继续等待,正在做任务,不要退出哦`)
-            await taskList();
+            if ($.taskList_limit >= 15){
+              console.log('触发死循环保护,结束')
+            } else {
+              console.log(`请继续等待,正在做任务,不要退出哦`)
+              await taskList();
+            }
           }
         }
       } catch (e) {
@@ -340,7 +351,28 @@ function lottery() {
     })
   })
 }
-
+function shareUrl() {
+  return new Promise((resolve) => {
+    const body = {"apiMapping":"/active/shareUrl"}
+    $.post(taskurl(body), async (err, resp, data) => {
+      try {
+        data = JSON.parse(data);
+        if (data['code'] === 5000) {
+          console.log(`尝试多次运行脚本即可获取好友邀请码`)
+        }
+        if (data['code'] === 200) {
+          if (data['data']) $.shareId.push(data['data']);
+          console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）的${$.name}好友互助码】${data['data']}\n`);
+          console.log(`此邀请码一天一变化，旧的不可用`)
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 function taskurl(body = {}) {
   return {
     'url': `${JD_API_HOST}?appid=blind-box&functionId=blindbox_prod&body=${JSON.stringify(body)}&t=${Date.now()}&loginType=2`,
@@ -358,6 +390,27 @@ function taskurl(body = {}) {
 }
 
 
+function getShareCode() {
+  return new Promise(resolve => {
+    $.get({
+      url: "https://raw.fastgit.org/zero205/updateTeam/main/shareCodes/jd_mohe.json",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
+      }
+    }, async (err, resp, data) => {
+      try {
+        if (err) {
+        } else {
+          $.zero205Code = JSON.parse(data) || []
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
 
 function TotalBean() {
   return new Promise(async resolve => {
