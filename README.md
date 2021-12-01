@@ -53,3 +53,5 @@ https://wxpusher.zjiecode.com/docs/
 * [@ccwav](https://github.com/ccwav/QLScript2)「京东资产变动」
 * [@Ariszy](https://github.com/Ariszy/Private-Script)
 * [@mmnvnmm](https://github.com/mmnvnmm/omo)「冲鸭」
+* [@chianPLA](https://github.com/chianPLA/xiaoshou/)「小手冰凉」
+
