@@ -3,7 +3,7 @@
 
 【拉库】
 
-    ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|ql"
+    ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|sendNotify|ql"
 
 
 拉好库后，有动手能力的，可以修改cron运行时间或者js脚本
