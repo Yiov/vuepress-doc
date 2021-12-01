@@ -1,6 +1,6 @@
 /*
 东东超市
-Last Modified time: 2021-11-21
+Last Modified time: 2021-3-4 21:22:37
 活动入口：京东APP首页-京东超市-底部东东超市
 Some Functions Modified From https://github.com/Zero-S1/JD_tools/blob/master/JD_superMarket.py
 东东超市兑换奖品请使用此脚本 jd_blueCoin.js
@@ -97,9 +97,9 @@ async function jdSuperMarket() {
     await smtgHome();
     await receiveUserUpgradeBlue();
     await Home();
-    if (helpAu === true) {
-      await helpAuthor();
-    }
+    //if (helpAu === true) {
+    //  await helpAuthor();
+    //}
   } catch (e) {
     $.logErr(e)
   }
@@ -136,7 +136,6 @@ async function drawLottery() {
   }
 }
 
-}
 async function doDailyTask() {
   const smtgQueryShopTaskRes = await smtgQueryShopTask();
   if (smtgQueryShopTaskRes.code === 0 && smtgQueryShopTaskRes.data.success) {
@@ -882,7 +881,25 @@ function smtgQueryPkTask() {
     })
   })
 }
-
+//PK邀请好友
+function smtgDoAssistPkTask(code) {
+  return new Promise((resolve) => {
+    $.get(taskUrl('smtg_doAssistPkTask', {"inviteCode": code}), (err, resp, data) => {
+      try {
+        if (err) {
+          console.log('\n东东超市: API查询请求失败 ‼️‼️')
+          console.log(JSON.stringify(err));
+        } else {
+          data = JSON.parse(data);
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
 function smtgReceiveCoin(body) {
   $.goldCoinData = {};
   return new Promise((resolve) => {
