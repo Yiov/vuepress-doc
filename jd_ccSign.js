@@ -5,7 +5,7 @@
 @感谢 匿名大佬 提供pin算法
 
 活动入口：领券中心
-更新时间：2021-11-2
+更新时间：2021-08-23
 已支持IOS双京东账号,Node.js支持N个京东账号
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
 ============Quantumultx===============
@@ -45,10 +45,6 @@ let allMessage = '';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('领券中心签到\n' +
-      '活动时间：-\n' +
-      '活动地址：-\n' +
-      '活动入口：京东app-领券-签到');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
