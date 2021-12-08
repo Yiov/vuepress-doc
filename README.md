@@ -1,4 +1,4 @@
-## 使用教程
+﻿## 使用教程
 
 
 【拉库】
@@ -51,6 +51,7 @@ Wxpusher的Uid获取
 * [@shufflewzc](https://github.com/shufflewzc/faker3)「Faker3纯净版」
 * [@smiek2221](https://github.com/smiek2221/scripts)「青蛙」
 * [@Aaron-lv](https://github.com/Aaron-lv/sync)「小小」
+* [@JDHelloWorld](https://github.com/JDHelloWorld/jd_scripts)「JDHelloWorld」
 * [@passerby-b](https://github.com/passerby-b/JDDJ)「京东到家」
 * [@ccwav](https://github.com/ccwav/QLScript2)「京东资产变动」
 * [@Ariszy](https://github.com/Ariszy/Private-Script)
