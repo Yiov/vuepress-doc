@@ -6,10 +6,13 @@
     ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|sendNotify|ql"
 
 
-拉好库后，有动手能力的，可以修改cron运行时间或者js脚本
+
+## 新版青龙说明
+
+拉库后通知sendNotify.js并未替换，依旧是官方的。
 
 
-Ps：本人也是第一次使用，仍还在学习中
+目前sendNotify.js有三个位置，deps文件夹、Scripts文件夹、以及拉库的作者Yiov_dogeast文件夹，可以从拉库的repo文件夹内，复制了粘贴到这三处，均选择覆盖即可
 
 
 
@@ -17,22 +20,21 @@ Ps：本人也是第一次使用，仍还在学习中
 
 使用的是【@ccwav】大佬的脚本，必备ql.js和sendNotify.js
 
-想修改小尾巴，避免拉库被覆盖，单拉一下即可
 
-    ql raw https://raw.githubusercontent.com/Yiov/dogeast/main/sendNotify.js
+配合CK_WxPusherUid.json的推送模板即可
 
 
-然后配合CK_WxPusherUid.json的推送模板即可
+### 食用方法
 
-    由于拉库无法拉取json文件，请在/root/ql/repo/Yiov_dogeast文件夹找到CK_WxPusherUid.json
+在repo文件夹找到CK_WxPusherUid.json，复制粘贴到scripts/Yiov_dogeast文件夹中
 
-复制 ，然后进入到/root/ql/scripts 粘贴
 
-右键编辑打开CK_WxPusherUid.json，按格式填入pin和Uid
+右键编辑打开CK_WxPusherUid.json，按格式填入pin和Uid，pin为JD号
+
 
 Wxpusher的Uid获取
 
-https://wxpusher.zjiecode.com/docs/
+    https://wxpusher.zjiecode.com/docs/
 
 
 
@@ -54,4 +56,5 @@ https://wxpusher.zjiecode.com/docs/
 * [@Ariszy](https://github.com/Ariszy/Private-Script)
 * [@mmnvnmm](https://github.com/mmnvnmm/omo)「冲鸭」
 * [@chianPLA](https://github.com/chianPLA/xiaoshou/)「小手冰凉」
+* [@lkyero](https://github.com/lkyero/GitHubDesktop_zh)「Github汉化」
 
