@@ -1,4 +1,4 @@
-﻿## 使用教程
+## 使用教程
 
 
 【拉库】
@@ -56,6 +56,8 @@ Wxpusher的Uid获取
 * [@ccwav](https://github.com/ccwav/QLScript2)「京东资产变动」
 * [@Ariszy](https://github.com/Ariszy/Private-Script)
 * [@mmnvnmm](https://github.com/mmnvnmm/omo)「冲鸭」
-* [@chianPLA](https://github.com/chianPLA/xiaoshou/)「小手冰凉」
+* [@chianPLA](https://github.com/chianPLA/xiaoshou)「小手冰凉」
+* [@msechen](https://gitee.com/msewb/jdrain)「msechen」
 * [@lkyero](https://github.com/lkyero/GitHubDesktop_zh)「Github汉化」
+
 
