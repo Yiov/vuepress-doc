@@ -1,7 +1,7 @@
 /*
 京喜签到
 cron 20 1,8 * * * jx_sign.js
-更新时间：2021-7-31
+更新时间：2021-12-15
 活动入口：京喜APP-我的-京喜签到
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -33,7 +33,7 @@ const JD_API_HOST = "https://m.jingxi.com/";
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
-let jdNotify = false;//是否关闭通知，false打开通知推送，true关闭通知推送
+let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
 let UA, UAInfo = {}, isLoginInfo = {};
@@ -56,11 +56,6 @@ if ($.isNode()) {
     $.msg($.name, "【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取", "https://bean.m.jd.com/bean/signIndex.action", { "open-url": "https://bean.m.jd.com/bean/signIndex.action" });
     return;
   }
-  console.log('京喜签到\n' +
-      '活动时间：-\n' +
-      '活动地址：-\n' +
-      '活动说明：需要每天手动进京喜APP，领红包页面后，方可激活做任务\n' +
-      '活动入口：京喜APP-签到领红包');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -76,7 +71,7 @@ if ($.isNode()) {
           isLoginInfo[$.UserName] = $.isLogin
         }
       }
-      if (i === 0) 
+      if (i === 0) console.log(`\n正在收集助力码请等待\n`)
       if (!isLoginInfo[$.UserName]) continue
       await signhb(1)
       await $.wait(500)
@@ -115,7 +110,6 @@ if ($.isNode()) {
       await signhb(2)
       await $.wait(2000)
       
-        
       if (!$.black) {
         await helpSignhb()
         if ($.commonlist && $.commonlist.length) {
@@ -476,7 +470,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
@@ -491,9 +485,11 @@ async function requestAlgo() {
               let enCryptMethodJDString = data.data.result.algo;
               if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
               console.log(`获取签名参数成功！`)
-              
+              //console.log(`fp: ${$.fingerprint}`)
+              //console.log(`token: ${$.token}`)
+              //console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
             } else {
-              
+              console.log(`fp: ${$.fingerprint}`)
               console.log('request_algo 签名参数API请求失败:')
             }
           } else {
