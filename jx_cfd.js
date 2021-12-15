@@ -1,7 +1,7 @@
 /*
 京喜财富岛
 cron 1 * * * * jd_cfd.js
-更新时间：2021-11-21
+更新时间：2021-12-15
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -55,10 +55,6 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('京喜财富岛\n' +
-      '活动时间：-\n' +
-      '活动地址：-\n' +
-      '活动入口：京喜app-财富岛');
   $.CryptoJS = $.isNode() ? require('crypto-js') : CryptoJS;
   await requestAlgo();
   await $.wait(1000)
@@ -1022,6 +1018,7 @@ function createbuilding(body, buildNmae) {
 
 
 
+
 // 获取用户信息
 function getUserInfo(showInvite = true) {
   return new Promise(async (resolve) => {
@@ -1449,6 +1446,29 @@ function showMsg() {
   });
 }
 
+function readShareCode() {
+  return new Promise(async resolve => {
+    $.get({url: `https://transfer.nz.lu/cfd`, timeout: 30 * 1000}, (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(JSON.stringify(err))
+          console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            console.log(`\n随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(30 * 1000);
+    resolve()
+  })
+}
 
 
 
@@ -1556,7 +1576,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
@@ -1571,9 +1591,11 @@ async function requestAlgo() {
               let enCryptMethodJDString = data.data.result.algo;
               if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
               console.log(`获取签名参数成功！`)
-              
+              //console.log(`fp: ${$.fingerprint}`)
+              //console.log(`token: ${$.token}`)
+              //console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
             } else {
-              
+              console.log(`fp: ${$.fingerprint}`)
               console.log('request_algo 签名参数API请求失败:')
             }
           } else {
