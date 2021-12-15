@@ -1,7 +1,7 @@
 /*
 京喜财富岛合成月饼
 cron 5 * * * * jd_cfd_mooncake.js
-更新时间：2021-11-14
+更新时间：2021-12-15
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -85,7 +85,7 @@ if ($.isNode()) {
     }
   }
   
- 
+  
   //await shareCodesFormat()
   
   await showMsg();
@@ -342,70 +342,6 @@ function composePearlAward(strDT, type, size) {
   })
 }
 
-// 助力奖励
-function pearlHelpDraw(ddwSeasonStartTm, dwUserId) {
-  return new Promise((resolve) => {
-    $.get(taskUrl(`user/PearlHelpDraw`, `__t=${Date.now()}&ddwSeaonStart=${ddwSeasonStartTm}&dwUserId=${dwUserId}`), (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} PearlHelpDraw API请求失败，请检查网路重试`)
-        } else {
-          data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
-          if (data.iRet === 0) {
-            console.log(`领取助力奖励成功：获得${data.StagePrizeInfo.ddwAwardHb / 100}元红包，总计获得${data.StagePrizeInfo.ddwVirHb / 100}元红包`)
-          } else {
-            console.log(`领取助力奖励失败：${data.sErrMsg}`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp);
-      } finally {
-        resolve();
-      }
-    })
-  })
-}
-
-// 助力
-function helpByStage(shareCodes) {
-  return new Promise((resolve) => {
-    $.get(taskUrl(`user/PearlHelpByStage`, `__t=${Date.now()}&strShareId=${shareCodes}`), (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} helpbystage API请求失败，请检查网路重试`)
-        } else {
-          data = JSON.parse(data.replace(/\n/g, "").match(new RegExp(/jsonpCBK.?\((.*);*\)/))[1]);
-          if (data.iRet === 0 || data.sErrMsg === 'success') {
-            console.log(`助力成功：获得${data.GuestPrizeInfo.strPrizeName}`)
-          } else if (data.iRet === 2235 || data.sErrMsg === '今日助力次数达到上限，明天再来帮忙吧~') {
-            console.log(`助力失败：${data.sErrMsg}`)
-            $.canHelp = false
-          } else if (data.iRet === 2232 || data.sErrMsg === '分享链接已过期') {
-            console.log(`助力失败：${data.sErrMsg}`)
-            $.delcode = true
-          } else if (data.iRet === 9999 || data.sErrMsg === '您还没有登录，请先登录哦~') {
-            console.log(`助力失败：${data.sErrMsg}`)
-            $.canHelp = false
-          } else if (data.iRet === 2229 || data.sErrMsg === '助力失败啦~') {
-            console.log(`助力失败：您的账号已黑`)
-            $.canHelp = false
-          } else if (data.iRet === 2190 || data.sErrMsg === '达到助力上限') {
-            console.log(`助力失败：${data.sErrMsg}`)
-            $.delcode = true
-          } else {
-            console.log(`助力失败：${data.sErrMsg}`)
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp);
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
 
 
 // 获取用户信息
@@ -688,7 +624,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
@@ -703,9 +639,11 @@ async function requestAlgo() {
               let enCryptMethodJDString = data.data.result.algo;
               if (enCryptMethodJDString) $.enCryptMethodJD = new Function(`return ${enCryptMethodJDString}`)();
               console.log(`获取签名参数成功！`)
-              
+              console.log(`fp: ${$.fingerprint}`)
+              console.log(`token: ${$.token}`)
+              console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
             } else {
-              
+              console.log(`fp: ${$.fingerprint}`)
               console.log('request_algo 签名参数API请求失败:')
             }
           } else {
