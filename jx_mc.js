@@ -1,6 +1,6 @@
 /*
 京喜牧场
-更新时间：2021-11-9
+更新时间：2021-12-15
 活动入口：京喜APP-我的-京喜牧场
 温馨提示：请先手动完成【新手指导任务】再运行脚本
 脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
@@ -78,7 +78,7 @@ if ($.isNode()) {
     return;
   }
   console.log('京喜牧场\n' +
-    '更新时间：2021-11-9\n' +
+    '更新时间：2021-12-15\n' +
     '活动入口：京喜APP-我的-京喜牧场\n' +
     '温馨提示：请先手动完成【新手指导任务】再运行脚本')
   for (let i = 0; i < cookiesArr.length; i++) {
@@ -491,7 +491,11 @@ async function takeGetRequest(type) {
       url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
       myRequest = getGetRequest(`GetEgg`, url);
       break;
-    
+    case 'help':
+      url = `https://m.jingxi.com/jxmc/operservice/EnrollFriend?sharekey=${$.code}&channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}&_stk=channel%2Csceneid%2Csharekey&_ste=1`;
+      url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
+      myRequest = getGetRequest(`help`, url);
+      break;
     case 'GetVisitBackInfo':
       url = `https://m.jingxi.com/jxmc/queryservice/GetVisitBackInfo?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&_stk=channel%2Csceneid&_ste=1`;
       url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
@@ -684,7 +688,31 @@ function dealReturn(type, data) {
         console.log(`执行任务成功`);
       }
       break;
-    
+    case 'help':
+      data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
+      if (data.ret === 0) {
+        if (data.data.result === 0) {
+          console.log(`助力成功`);
+        } else if (data.data.result === 1) {
+          console.log(`不能助力自己`);
+        } else if (data.data.result === 3) {
+          console.log(`该好友助力已满`);
+          $.delcode = true;
+        } else if (data.data.result === 4) {
+          console.log(`助力次数已用完`);
+          $.canHelp = false;
+        } else if (data.data.result === 5) {
+          console.log(`已经助力过此好友`);
+        } else {
+          console.log(JSON.stringify(data))
+        }
+      } else if (data.ret === 1016) {
+        console.log(`活动太火爆了，还是去买买买吧~`);
+        $.canHelp = false;
+      } else {
+        console.log(JSON.stringify(data))
+      }
+      break;
     case 'GetVisitBackInfo':
       data = JSON.parse(data.match(new RegExp(/jsonpCBK.?\((.*);*/))[1]);
       if (data.ret === 0) {
@@ -793,38 +821,6 @@ function randomString(e) {
   return n
 }
 
-function getAuthorShareCode(url) {
-  return new Promise(async resolve => {
-    const options = {
-      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      }
-    };
-    if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
-      const tunnel = require("tunnel");
-      const agent = {
-        https: tunnel.httpsOverHttp({
-          proxy: {
-            host: process.env.TG_PROXY_HOST,
-            port: process.env.TG_PROXY_PORT * 1
-          }
-        })
-      }
-      Object.assign(options, { agent })
-    }
-    $.get(options, async (err, resp, data) => {
-      try {
-        resolve(JSON.parse(data))
-      } catch (e) {
-        // $.logErr(e, resp)
-      } finally {
-        resolve();
-      }
-    })
-    await $.wait(10000)
-    resolve();
-  })
-}
 
 
 
@@ -883,7 +879,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
