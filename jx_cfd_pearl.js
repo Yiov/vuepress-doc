@@ -1,7 +1,7 @@
 /*
 财富岛珍珠兑换
 cron 59 0-23/1 * * * jd_cfd_pearl_ex.js
-更新时间：2021-9-11
+更新时间：2021-12-17
 活动入口：京喜APP-我的-京喜财富岛-最左侧建筑
  */
 const $ = new Env("财富岛珍珠兑换");
@@ -260,7 +260,7 @@ async function requestAlgo() {
       "expandParams": ""
     })
   }
-  new Promise(async resolve => {
+  return new Promise(async resolve => {
     $.post(options, (err, resp, data) => {
       try {
         if (err) {
