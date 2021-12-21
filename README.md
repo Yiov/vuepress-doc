@@ -57,7 +57,7 @@ Wxpusher的Uid获取
 * [@Ariszy](https://github.com/Ariszy/Private-Script)
 * [@mmnvnmm](https://github.com/mmnvnmm/omo)「冲鸭」
 * [@chianPLA](https://github.com/chianPLA/xiaoshou)「小手冰凉」
-* [@msechen](https://gitee.com/msewb/jdrain)「msechen」
+* [@msechen](https://gitee.com/msewb/update)「红包雨系列」
 * [@lkyero](https://github.com/lkyero/GitHubDesktop_zh)「Github汉化」
 
 
