@@ -61,7 +61,15 @@ let strAllNotify="";
 let llPetError=false;
 let strGuoqi="";
 let RemainMessage = '\n';
-
+RemainMessage += "⭕提醒:⭕" + '\n';
+RemainMessage += '【极速金币】京东极速版->我的->金币(极速版使用)\n';
+RemainMessage += '【京东赚赚】微信->京东赚赚小程序->底部赚好礼->提现无门槛红包(京东使用)\n';
+RemainMessage += '【京东秒杀】京东->中间频道往右划找到京东秒杀->中间点立即签到->兑换无门槛红包(京东使用)\n';
+RemainMessage += '【东东萌宠】京东->我的->东东萌宠,完成是京东红包,可以用于京东app的任意商品\n';
+RemainMessage += '【领现金】京东->我的->东东萌宠->领现金(微信提现+京东红包)\n';
+RemainMessage += '【东东农场】京东->我的->东东农场,完成是京东红包,可以用于京东app的任意商品\n';
+RemainMessage += '【京喜工厂】京喜->我的->京喜工厂,完成是商品红包,用于购买指定商品(不兑换会过期)\n';
+RemainMessage += '【其他】京喜红包只能在京喜使用,其他同理';
 
 let WP_APP_TOKEN_ONE = "";
 let TempBaipiao = "";
@@ -263,12 +271,13 @@ if ($.isNode()) {
 				if ((i + 1) % intPerSent == 0) {
 					console.log("分段通知条件达成，处理发送通知....");
 					if ($.isNode() && allMessage) {
+						var TempMessage=allMessage;
 						if(strAllNotify)
 							allMessage=strAllNotify+`\n`+allMessage;
 
 						await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 							url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-						})
+						}, '\n\n本通知 By ccwav Mod',TempMessage)
 					}
 					if ($.isNode() && allMessageMonth) {
 						await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -331,12 +340,13 @@ if ($.isNode()) {
 		if (allMessage || allMessageMonth) {
 			console.log("分段通知收尾，处理发送通知....");
 			if ($.isNode() && allMessage) {
+				var TempMessage=allMessage;
 				if(strAllNotify)
 					allMessage=strAllNotify+`\n`+allMessage;
 				
 				await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 					url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-				})
+				}, '\n\n本通知 By ccwav Mod',TempMessage)
 			}
 			if ($.isNode() && allMessageMonth) {
 				await notify.sendNotify(`京东月资产变动`, `${allMessageMonth}`, {
@@ -347,36 +357,40 @@ if ($.isNode()) {
 	} else {
 
 		if ($.isNode() && allMessageGp2) {
+			var TempMessage=allMessageGp2;
 			if(strAllNotify)
 				allMessageGp2=strAllNotify+`\n`+allMessageGp2;
 			await notify.sendNotify(`${$.name}#2`, `${allMessageGp2}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			})
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp3) {
+			var TempMessage=allMessageGp3;
 			if(strAllNotify)
 				allMessageGp3=strAllNotify+`\n`+allMessageGp3;
 			await notify.sendNotify(`${$.name}#3`, `${allMessageGp3}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			})
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessageGp4) {
+			var TempMessage=allMessageGp4;
 			if(strAllNotify)
 				allMessageGp4=strAllNotify+`\n`+allMessageGp4;
 			await notify.sendNotify(`${$.name}#4`, `${allMessageGp4}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			})
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
 			await $.wait(10 * 1000);
 		}
 		if ($.isNode() && allMessage) {
+			var TempMessage=allMessage;
 			if(strAllNotify)
 				allMessage=strAllNotify+`\n`+allMessage;
 			
 			await notify.sendNotify(`${$.name}`, `${allMessage}`, {
 				url: `https://bean.m.jd.com/beanDetail/index.action?resourceValue=bean`
-			})
+			}, '\n\n本通知 By ccwav Mod',TempMessage)
 			await $.wait(10 * 1000);
 		}
 
@@ -544,13 +558,12 @@ async function showMsg() {
 	ReturnMessage += `\n`;
 	strsummary+= `\n`;
 	ReturnMessage += `【昨日京豆】收${$.incomeBean}豆`;
-	strsummary+= `【昨日京豆】收${$.incomeBean}豆`;
+	
 	if ($.expenseBean != 0) {
-		ReturnMessage += `,支${$.expenseBean}豆`;
-		strsummary += `,支${$.expenseBean}豆`;
+		ReturnMessage += `,支${$.expenseBean}豆`;		
 	}
 	ReturnMessage += `\n`;	
-	strsummary += `\n`;	
+	
 	if ($.beanCount){		
 		ReturnMessage += `【当前京豆】${$.beanCount}豆(≈${(($.beanCount-$.beanChangeXi)/ 100).toFixed(2)}元)\n`;
 		strsummary+= `【当前京豆】${$.beanCount}豆(≈${(($.beanCount-$.beanChangeXi)/ 100).toFixed(2)}元)\n`;	
@@ -564,22 +577,16 @@ async function showMsg() {
 	}
 	
 	if (doCheckJxBeans == "true") {
-		ReturnMessage += `【今日喜豆】收${$.todayinJxBean}豆`;
-		strsummary+= `【今日喜豆】收${$.todayinJxBean}豆`;
+		ReturnMessage += `【今日喜豆】收${$.todayinJxBean}豆`;		
 		if ($.todayOutJxBean != 0) {
-			ReturnMessage += `,支${$.todayOutJxBean}豆`;
-			strsummary += `,支${$.todayOutJxBean}豆`;
+			ReturnMessage += `,支${$.todayOutJxBean}豆`;			
 		}
-		ReturnMessage += `\n`;
-		strsummary += `\n`;
-		ReturnMessage += `【昨日喜豆】收${$.inJxBean}豆`;
-		strsummary += `【昨日喜豆】收${$.inJxBean}豆`;
+		ReturnMessage += `\n`;		
+		ReturnMessage += `【昨日喜豆】收${$.inJxBean}豆`;		
 		if ($.OutJxBean != 0) {
-			ReturnMessage += `,支${$.OutJxBean}豆`;
-			strsummary += `,支${$.OutJxBean}豆`;
+			ReturnMessage += `,支${$.OutJxBean}豆`;			
 		}
-		ReturnMessage += `\n`;
-		strsummary += `\n`;
+		ReturnMessage += `\n`;		
 		ReturnMessage += `【当前喜豆】${$.xibeanCount}喜豆(≈${($.xibeanCount/ 100).toFixed(2)}元)\n`;
 		strsummary += `【当前喜豆】${$.xibeanCount}喜豆(≈${($.xibeanCount/ 100).toFixed(2)}元)\n`;
 	}
@@ -785,7 +792,7 @@ async function showMsg() {
 	}
 	ReturnMessage += `🧧🧧🧧红包明细🧧🧧🧧\n`;
 	ReturnMessage += `${$.message}`;
-	
+	strsummary +=`${$.message}`;
 	
 	if (userIndex2 != -1) {
 		allMessageGp2 += ReturnMessageTitle+ReturnMessage + `\n`;
