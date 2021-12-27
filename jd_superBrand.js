@@ -1,7 +1,7 @@
 /**
- 特务Z
+ 特物Z
  脚本没有自动开卡，会尝试领取开卡奖励
- cron 13 15,19 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_superBrand.js
+ cron 23 8,11,20 * * * https://raw.githubusercontent.com/star261/jd/main/scripts/jd_productZ4Brand.js
  一天要跑2次
  */
 const $ = new Env('特物Z');
@@ -223,26 +223,7 @@ function dealReturn(type, data) {
             console.log(JSON.stringify(data));
             break;
 
-        case 'help':
-            if(data.code === '0' && data.data.bizCode === '0'){
-                $.codeInfo.time ++;
-                console.log(`助力成功`);
-            }else if (data.code === '0' && data.data.bizCode === '104'){
-                $.codeInfo.time ++;
-                console.log(`已助力过`);
-            }else if (data.code === '0' && data.data.bizCode === '108'){
-                $.canHelp = false;
-                console.log(`助力次数已用完`);
-            }else if (data.code === '0' && data.data.bizCode === '103'){
-                console.log(`助力已满`);
-                $.codeInfo.time = 3;
-            }else if (data.code === '0' && data.data.bizCode === '2001'){
-                $.canHelp = false;
-                console.log(`黑号`);
-            }else{
-                console.log(JSON.stringify(data));
-            }
-            break;
+        
         default:
             console.log(JSON.stringify(data));
     }
