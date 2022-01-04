@@ -25,8 +25,8 @@ let message = '', allMessage = '';
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '';
 const JD_API_HOST = 'https://api.m.jd.com/client.action';
-let appIdArr = ['1E1NXxq0', '1FFVQyqw'];
-let appNameArr = ['众筹许愿池', '1111点心动'];
+let appIdArr = ['1FFVQyqw','1GVFUx6g', '1E1xZy6s'];
+let appNameArr = ['1111点心动','JOY年尾之旅', 'PLUS生活特权'];
 let appId, appName;
 $.shareCode = [];
 if ($.isNode()) {
@@ -42,10 +42,6 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('众筹许愿池\n' +
-      '活动时间：-\n' +
-      '抽奖限制：-\n' +
-      '活动入口：京东AP-京东众筹-众筹许愿池');
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -76,7 +72,6 @@ if ($.isNode()) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage)
   }
-  
   
 })()
     .catch((e) => {
@@ -284,7 +279,6 @@ function taskUrl(function_id, body = {}) {
     }
   }
 }
-
 
 
 function TotalBean() {
