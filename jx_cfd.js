@@ -1,7 +1,7 @@
 /*
 京喜财富岛
 cron 1 * * * * jd_cfd.js
-更新时间：2021-12-15
+更新时间：2022-1-5
 活动入口：京喜APP-我的-京喜财富岛
 
 已支持IOS双京东账号,Node.js支持N个京东账号
@@ -85,7 +85,6 @@ if ($.isNode()) {
     }
   }
   
-  
   //await shareCodesFormat()
   
   await showMsg();
@@ -135,8 +134,10 @@ async function cfd() {
     await getTakeAggrPage('wxsign')
 
     //使用道具
-    await $.wait(2000)
-    await GetPropCardCenterInfo()
+    if (new Date().getHours() < 22){
+      await $.wait(2000)
+      await GetPropCardCenterInfo()
+    }
 
     //助力奖励
     await $.wait(2000)
@@ -798,7 +799,7 @@ async function getActTask(type = true) {
           if (type) {
             for (let key of Object.keys(data.Data.TaskList)) {
               let vo = data.Data.TaskList[key]
-              if ([1, 2].includes(vo.dwOrderId) && (vo.dwCompleteNum !== vo.dwTargetNum) && vo.dwTargetNum < 10) {
+              if ([0, 1, 2].includes(vo.dwOrderId) && (vo.dwCompleteNum !== vo.dwTargetNum) && vo.dwTargetNum < 10) {
                 console.log(`开始【🐮牛牛任务】${vo.strTaskName}`)
                 for (let i = vo.dwCompleteNum; i < vo.dwTargetNum; i++) {
                   console.log(`【🐮牛牛任务】${vo.strTaskName} 进度：${i + 1}/${vo.dwTargetNum}`)
@@ -853,7 +854,11 @@ function awardActTask(function_path, taskInfo = '') {
               if (msg.indexOf('活动太火爆了') !== -1) {
                 str = '任务为成就任务或者未到任务时间';
               } else {
-                str = msg + prizeInfo ? `获得金币 ¥ ${JSON.parse(prizeInfo).ddwCoin}` : '';
+                if (JSON.parse(prizeInfo).dwPrizeType == 4) {
+                  str = msg + prizeInfo ? `获得红包 ¥ ${JSON.parse(prizeInfo).strPrizeName}` : '';
+                } else {
+                  str = msg + prizeInfo ? `获得金币 ¥ ${JSON.parse(prizeInfo).ddwCoin}` : '';
+                }
               }
               console.log(`【🐮领牛牛任务奖励】${strTaskName} ${str}\n${$.showLog ? data : ''}`);
             }
@@ -1446,29 +1451,7 @@ function showMsg() {
   });
 }
 
-function readShareCode() {
-  return new Promise(async resolve => {
-    $.get({url: `https://transfer.nz.lu/cfd`, timeout: 30 * 1000}, (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(JSON.stringify(err))
-          console.log(`${$.name} readShareCode API请求失败，请检查网路重试`)
-        } else {
-          if (data) {
-            console.log(`\n随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
-            data = JSON.parse(data);
-          }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-    await $.wait(30 * 1000);
-    resolve()
-  })
-}
+
 
 
 
@@ -1595,7 +1578,7 @@ async function requestAlgo() {
               //console.log(`token: ${$.token}`)
               //console.log(`enCryptMethodJD: ${enCryptMethodJDString}`)
             } else {
-              console.log(`fp: ${$.fingerprint}`)
+              //console.log(`fp: ${$.fingerprint}`)
               console.log('request_algo 签名参数API请求失败:')
             }
           } else {
