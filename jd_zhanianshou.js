@@ -1,10 +1,10 @@
 /*
 
-
+脚本有问题，凑活用
 =================================Quantumultx=========================
 [task_local]
-#城城领现金
-0 0-23/5 * * * jd_zhanianshou.js, tag=城城领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+#炸年兽
+0 0-23/5 * * * jd_zhanianshou.js, tag=炸年兽, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
 
  */
@@ -136,15 +136,19 @@ $.shareCodesArr = [];
                                 }
                                 break
                             case 21:
-                                for (var o = 0; o < task.brandMemberVos.length; o++) {
-                                    if (task.brandMemberVos[o].status == 1) {
-                                        console.log(`\n\n ${task.brandMemberVos[o].title}`)
-                                        memberUrl = task.brandMemberVos[o].memberUrl
-                                        memberUrl = transform(memberUrl)
-                                        await join(task.brandMemberVos[o].vendorIds, memberUrl.channel, memberUrl.shopId ? memberUrl.shopId : "")
-                                        await tigernian_collectScore(task.brandMemberVos[o].taskToken, task.taskId)
-                                    }
+                                if (process.env.FS_LEVEL != 'card') {
+                                    console.log('默认不开卡，设置FS_LEVEL为card开卡')
+                                }else{
+                                    for (var o = 0; o < task.brandMemberVos.length; o++) {
+                                        if (task.brandMemberVos[o].status == 1) {
+                                            console.log(`\n\n ${task.brandMemberVos[o].title}`)
+                                            memberUrl = task.brandMemberVos[o].memberUrl
+                                            memberUrl = transform(memberUrl)
+                                            //await join(task.brandMemberVos[o].vendorIds, memberUrl.channel, memberUrl.shopId ? memberUrl.shopId : "")
+                                            await tigernian_collectScore(task.brandMemberVos[o].taskToken, task.taskId)
+                                        }
 
+                                    }
                                 }
                         }
 
@@ -505,44 +509,7 @@ function tigernian_getFeedDetail2(taskId) {
     })
 }
 
-function join(venderId, channel, shopId) {
-    let shopId_ = shopId != "" ? `,"shopId":"${shopId}"` : ""
-    return new Promise((resolve) => {
-        $.get({
-            url: `https://api.m.jd.com/client.action?appid=jd_shop_member&functionId=bindWithVender&body={"venderId":"${venderId}"${shopId_},"bindByVerifyCodeFlag":1,"registerExtend":{},"writeChildFlag":0,"channel":${channel}}&client=H5&clientVersion=9.2.0&uuid=88888`,
-            headers: {
-                'Content-Type': 'text/plain; Charset=UTF-8',
-                'Cookie': cookie,
-                'Host': 'api.m.jd.com',
-                'Connection': 'keep-alive',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                "User-Agent": $.UA,
-                'Accept-Language': 'zh-cn',
-                'Referer': `https://shopmember.m.jd.com/shopcard/?venderId=${venderId}&shopId=${venderId}&venderType=5&channel=401&returnUrl=https://lzdz1-isv.isvjcloud.com/dingzhi/personal/care/activity/4540555?activityId=dz210768869313`,
-                'Accept-Encoding': 'gzip, deflate, br'
-            }
-        }, async(err, resp, data) => {
-            try {
-                if (err) {
-                    console.log(`${JSON.stringify(err)}`)
-                    console.log(`${$.name} API请求失败，请检查网路重试`)
-                } else {
-                    if (safeGet(data)) {
-                        if (data.indexOf("成功") != -1) {
-                            console.log(`\n\n 入会成功\n`)
-                        } else {
-                            console.log(`\n\n 失败:${JSON.stringify(data)}\n`)
-                        }
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp)
-            } finally {
-                resolve(data);
-            }
-        })
-    })
-}
+
 
 function taskPostUrl(functionId, body) {
     return {
