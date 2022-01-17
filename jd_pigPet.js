@@ -10,19 +10,18 @@
 ===============Quantumultx===============
 [task_local]
 #京东金融养猪猪
-12 0-23/6 * * * jd_pigPet.js, tag=京东金融养猪猪, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdyz.png, enabled=true
+12 0-23/6 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_pigPet.js, tag=京东金融养猪猪, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdyz.png, enabled=true
 
 ================Loon==============
 [Script]
-cron "12 0-23/6 * * *" script-path=jd_pigPet.js, tag=京东金融养猪猪
+cron "12 0-23/6 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_pigPet.js, tag=京东金融养猪猪
 
 ===============Surge=================
-京东金融养猪猪 = type=cron,cronexp="12 0-23/6 * * *",wake-system=1,timeout=3600,script-path=jd_pigPet.js
+京东金融养猪猪 = type=cron,cronexp="12 0-23/6 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_pigPet.js
 
 ============小火箭=========
-京东金融养猪猪 = type=cron,script-path=jd_pigPet.js, cronexpr="12 0-23/6 * * *", timeout=3600, enable=true
- */
-
+京东金融养猪猪 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_pigPet.js, cronexpr="12 0-23/6 * * *", timeout=3600, enable=true
+*/
 const $ = new Env('金融养猪');
 const url = require('url');
 let cookiesArr = [], cookie = '', allMessage = '';
@@ -31,6 +30,8 @@ const MISSION_BASE_API = `https://ms.jr.jd.com/gw/generic/mission/h5/m`;
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
+let shareId = "hRYQeeaVYXQBX1Mguan2kA"
+$.shareCodes = [];
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -63,19 +64,21 @@ if ($.isNode()) {
       await jdPigPet();
     }
   }
+  
   if (allMessage && new Date().getHours() % 6 === 0) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
     $.msg($.name, '', allMessage);
   }
 })()
-    .catch((e) => {
-      $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
-    })
-    .finally(() => {
-      $.done();
-    })
+  .catch((e) => {
+    $.log('', `❌ ${$.name}, 失败! 原因: ${e}!`, '')
+  })
+  .finally(() => {
+    $.done();
+  })
 async function jdPigPet() {
   try {
+    $.notAddFood = false;
     await pigPetLogin();
     if (!$.hasPig) return
     await pigPetSignIndex();
@@ -83,17 +86,25 @@ async function jdPigPet() {
     await pigPetOpenBox();
     await pigPetLotteryIndex();
     await pigPetLottery();
+    if (process.env.JD_PIGPET_PK && process.env.JD_PIGPET_PK === 'true') {
+      await pigPetRank();
+    }
     await pigPetMissionList();
     await missions();
-    await pigPetUserBag();
+    if ($.notAddFood) {
+      console.log(`\n猪猪已成熟，跳过喂食`)
+    } else {
+      await pigPetUserBag();
+    }
   } catch (e) {
     $.logErr(e)
   }
 }
 async function pigPetLottery() {
   if ($.currentCount > 0) {
-    for (let i = 0; i < $.currentCount; i ++) {
+    for (let i = 0; i < $.currentCount; i++) {
       await pigPetLotteryPlay();
+      await $.wait(5000);
     }
   }
 }
@@ -107,8 +118,8 @@ async function pigPetSign() {
 function pigPetSignOne() {
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"juheye",
+      "source": 2,
+      "channelLV": "juheye",
       "riskDeviceParam": "{}",
       "no": $.no
     }
@@ -119,7 +130,7 @@ function pigPetSignOne() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log('签到结果',data)
+            console.log('签到结果', data)
             // data = JSON.parse(data);
             // if (data.resultCode === 0) {
             //   if (data.resultData.resultCode === 0) {
@@ -158,20 +169,24 @@ function pigPetUserBag() {
             data = JSON.parse(data);
             if (data.resultCode === 0) {
               if (data.resultData.resultCode === 0) {
-                if (data.resultData.resultData && data.resultData.resultData.goods) { 
+                if (data.resultData.resultData && data.resultData.resultData.goods) {
                   console.log(`\n食物名称     数量`);
                   for (let item of data.resultData.resultData.goods) {
                     console.log(`${item.goodsName}      ${item.count}g`);
                   }
                   for (let item of data.resultData.resultData.goods) {
-                    $.remain = item.count
-                    for (let i = 1; i < item.count/20 ; i++) {
-                      console.log(`10秒后开始喂食${item.goodsName}，当前数量为${$.remain}g`)
-                      console.log(`默认≥20就投喂，可自己手动修改`)
-                      $.remain -= 20
-                      await $.wait(10000);
-                      await pigPetAddFood(item.sku);
-                      if ($.result == 90) break;
+                    if (item.count >= 20) {
+                      let num = 50;
+                      $.finish = false;
+                      $.remain = item.count
+                      do {
+                        console.log(`10秒后开始喂食${item.goodsName}，当前数量为${$.remain}g`)
+                        console.log(`默认≥20就投喂，可自己手动修改`)
+                        await $.wait(10000);
+                        await pigPetAddFood(item.sku);
+                        $.remain = $.remain - 20
+                        num--
+                      } while (num > 0 && !$.finish && $.remain >= 20)
                     }
                   }
                 } else {
@@ -199,17 +214,11 @@ function pigPetAddFood(skuId) {
     //console.log(`skuId::::${skuId}`)
     const body = {
       "source": 2,
-      "channelLV":"yqs",
-      "riskDeviceParam":"{}",
+      "channelLV": "yqs",
+      "riskDeviceParam": "{}",
       "skuId": skuId.toString(),
-      "category":"1001",
+      "category": "1001",
     }
-    // const body = {
-    //   "source": 2,
-    //   "channelLV":"juheye",
-    //   "riskDeviceParam":"{}",
-    //   "skuId": skuId.toString(),
-    // }
     $.post(taskUrl('pigPetAddFood', body), (err, resp, data) => {
       try {
         if (err) {
@@ -218,8 +227,14 @@ function pigPetAddFood(skuId) {
         } else {
           if (data) {
             data = JSON.parse(data);
-            $.result = data.resultData.resultData.cote.pig.currCount
-            //console.log(`${JSON.stringify(data)}`)
+            console.log(`喂食结果：${data.resultData.resultMsg}`)
+            if (data.resultData.resultData && data.resultData.resultCode == 0) {
+              item = data.resultData.resultData.cote.pig
+              if (item.curLevel = 3 && item.currCount >= item.currLevelCount) {
+                console.log(`\n猪猪已经成年了，请及时前往京东金融APP领取奖励\n`)
+                $.finish = true
+              }
+            }
           } else {
             console.log(`京东服务器返回空数据`)
           }
@@ -235,9 +250,10 @@ function pigPetAddFood(skuId) {
 function pigPetLogin() {
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"juheye",
-      "riskDeviceParam":"{}",
+      "shareId": shareId,
+      "source": 2,
+      "channelLV": "juheye",
+      "riskDeviceParam": "{}",
     }
     $.post(taskUrl('pigPetLogin', body), async (err, resp, data) => {
       try {
@@ -257,8 +273,11 @@ function pigPetLogin() {
                 if (data.resultData.resultData.wished) {
                   if (data.resultData.resultData.wishAward) {
                     allMessage += `京东账号${$.index} ${$.nickName || $.UserName}\n${data.resultData.resultData.wishAward.name}已可兑换${$.index !== cookiesArr.length ? '\n\n' : ''}`
+                    console.log(`【京东账号${$.index}】${$.nickName || $.UserName} ${data.resultData.resultData.wishAward.name}已可兑换，请及时去京东金融APP领取`)
+                    $.notAddFood = true;
                   }
                 }
+                console.log(`\n【京东账号${$.index}】${$.nickName || $.UserName} 的邀请码为${data.resultData.resultData.user.shareId}\n`)
               } else {
                 console.log(`Login其他情况：${JSON.stringify(data)}`)
               }
@@ -291,17 +310,17 @@ function pigPetOpenBox() {
             if (data.resultCode === 0) {
               if (data.resultData.resultCode === 0) {
                 if (data.resultData.resultData && data.resultData.resultData.award) {
-                  console.log(`开宝箱获得${data.resultData.resultData.award.content}，数量：${data.resultData.resultData.award.count}`);
+                  console.log(`开宝箱获得${data.resultData.resultData.award.content}，数量：${data.resultData.resultData.award.count}\n`);
 
                 } else {
-                  console.log(`开宝箱暂无奖励`)
+                  console.log(`开宝箱暂无奖励\n`)
                 }
                 await $.wait(2000);
                 await pigPetOpenBox();
               } else if (data.resultData.resultCode === 420) {
-                console.log(`开宝箱失败:${data.resultData.resultMsg}`)
+                console.log(`开宝箱失败:${data.resultData.resultMsg}\n`)
               } else {
-                console.log(`开宝箱其他情况：${JSON.stringify(data)}`)
+                console.log(`开宝箱其他情况：${JSON.stringify(data)}\n`)
               }
             }
           } else {
@@ -321,8 +340,8 @@ function pigPetLotteryIndex() {
   $.currentCount = 0;
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"juheye",
+      "source": 2,
+      "channelLV": "juheye",
       "riskDeviceParam": "{}"
     }
     $.post(taskUrl('pigPetLotteryIndex', body), (err, resp, data) => {
@@ -337,11 +356,139 @@ function pigPetLotteryIndex() {
             if (data.resultCode === 0) {
               if (data.resultData.resultCode === 0) {
                 if (data.resultData.resultData) {
-                  console.log(`当前大转盘剩余免费抽奖次数：：${data.resultData.resultData.currentCount}`);
+                  console.log(`当前大转盘剩余免费抽奖次数：${data.resultData.resultData.currentCount}\n`);
+                  console.log(`您的大转盘助力码为：${data.resultData.resultData.helpId}\n`);
+                  $.shareCodes.push(data.resultData.resultData.helpId)
                   $.currentCount = data.resultData.resultData.currentCount;
                 }
               } else {
                 console.log(`查询大转盘的次数：${JSON.stringify(data)}`)
+              }
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+//查询排行榜好友
+function pigPetRank() {
+  return new Promise(async resolve => {
+    const body = {
+      "type": 1,
+      "page": 1,
+      "source": 2,
+      "channelLV": "juheye",
+      "riskDeviceParam": "{}"
+    }
+    $.post(taskUrl('pigPetRank', body), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} pigPetRank API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            n = 0
+            if (data.resultCode === 0) {
+              if (data.resultData.resultCode === 0 && n < 5) {
+                $.friends = data.resultData.resultData.friends
+                for (let i = 0; i < $.friends.length; i++) {
+                  if ($.friends[i].status === 1) {
+                    $.friendId = $.friends[i].uid
+                    $.name = $.friends[i].nickName
+                    if (!['zero205', 'xfa05'].includes($.name)) { //放过孩子吧TT
+                      console.log(`去抢夺【${$.friends[i].nickName}】的食物`)
+                      await $.wait(2000)
+                      await pigPetFriendIndex($.friendId)
+                    }
+                  }
+                }
+              } else {
+                console.log(`查询排行榜失败：${JSON.stringify(data)}`)
+              }
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+function pigPetFriendIndex(friendId) {
+  return new Promise(async resolve => {
+    const body = {
+      "friendId": friendId,
+      "source": 2,
+      "channelLV": "juheye",
+      "riskDeviceParam": "{}"
+    }
+    $.post(taskUrl('pigPetFriendIndex', body), async (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} pigPetFriendIndex API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            if (data.resultCode === 0) {
+              if (data.resultData.resultCode === 0) {
+                await pigPetRobFood($.friendId)
+                await $.wait(3000)
+              } else {
+                console.log(`进入好友猪窝失败：${JSON.stringify(data)}`)
+              }
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+//抢夺食物
+async function pigPetRobFood(friendId) {
+  return new Promise(async resolve => {
+    const body = {
+      "source": 2,
+      "friendId": friendId,
+      "channelLV": "juheye",
+      "riskDeviceParam": "{}"
+    }
+    $.post(taskUrl('pigPetRobFood', body), (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            if (data.resultCode === 0) {
+              if (data.resultData.resultCode === 0) {
+                if (data.resultData.resultData.robFoodCount > 0) {
+                  console.log(`抢夺成功，获得${data.resultData.resultData.robFoodCount}g${data.resultData.resultData.robFoodName}\n`);
+                  n++
+                } else {
+                  console.log(`抢夺失败，损失${data.resultData.resultData.robFoodCount}g${data.resultData.resultData.robFoodName}\n`);
+                }
+              } else {
+                console.log(`抢夺失败：${JSON.stringify(data)}\n`)
               }
             }
           } else {
@@ -361,8 +508,8 @@ function pigPetSignIndex() {
   $.sign = true;
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"juheye",
+      "source": 2,
+      "channelLV": "juheye",
       "riskDeviceParam": "{}"
     }
     $.post(taskUrl('pigPetSignIndex', body), (err, resp, data) => {
@@ -400,11 +547,11 @@ function pigPetSignIndex() {
 function pigPetLotteryPlay() {
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"juheye",
-      "riskDeviceParam":"{}",
-      "t":Date.now(),
-      "type":0,
+      "source": 2,
+      "channelLV": "juheye",
+      "riskDeviceParam": "{}",
+      "validation": "",
+      "type": 0
     }
     $.post(taskUrl('pigPetLotteryPlay', body), (err, resp, data) => {
       try {
@@ -413,17 +560,62 @@ function pigPetLotteryPlay() {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            // console.log(data)
             data = JSON.parse(data);
             if (data.resultCode === 0) {
               if (data.resultData.resultCode === 0) {
                 if (data.resultData.resultData) {
-                  // console.log(`当前大转盘剩余免费抽奖次数：：${data.resultData.resultData.currentCount}`);
+                  if (data.resultData.resultData.award) {
+                    console.log(`大转盘抽奖获得：${data.resultData.resultData.award.name} * ${data.resultData.resultData.award.count}\n`);
+                  } else {
+                    console.log(`大转盘抽奖结果：没抽中，再接再励哦～\n`)
+                  }
                   $.currentCount = data.resultData.resultData.currentCount;//抽奖后剩余的抽奖次数
                 }
               } else {
                 console.log(`其他情况：${JSON.stringify(data)}`)
               }
+            }
+          } else {
+            console.log(`京东服务器返回空数据`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve();
+      }
+    })
+  })
+}
+
+function pigPetLotteryHelpFriend(helpId) {
+  return new Promise(async resolve => {
+    const body = {
+      "source": 2,
+      "helpId": helpId,
+      "channelLV": "juheye",
+      "riskDeviceParam": "{}"
+    }
+    $.post(taskUrl('pigPetLotteryHelpFriend', body), (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            data = JSON.parse(data);
+            if (data.resultCode === 0) {
+              if (data.resultData.resultCode === 0) {
+                if (data.resultData.resultData.opResult == 0) {
+                  console.log(`大转盘助力结果：助力成功\n`);
+                } else if (data.resultData.resultData.opResult == 461) {
+                  console.log(`大转盘助力结果：助力失败，已经助力过了\n`);
+                } else {
+                  console.log(`大转盘助力结果：助力失败`);
+                }
+              }
+            } else {
+              console.log(`${JSON.stringify(data)}\n`)
             }
           } else {
             console.log(`京东服务器返回空数据`)
@@ -443,9 +635,9 @@ async function missions() {
       console.log(`\n${item.missionName}任务已做完,开始领取奖励`)
       await pigPetDoMission(item.mid);
       await $.wait(1000)
-    } else if (item.status === 5){
+    } else if (item.status === 5) {
       console.log(`\n${item.missionName}已领取`)
-    } else if (item.status === 3){
+    } else if (item.status === 3) {
       console.log(`\n${item.missionName}未完成`)
       if (item.mid === 'CPD01') {
         await pigPetDoMission(item.mid);
@@ -474,9 +666,9 @@ async function missions() {
 function pigPetDoMission(mid) {
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"",
-      "riskDeviceParam":"{}",
+      "source": 2,
+      "channelLV": "",
+      "riskDeviceParam": "{}",
       mid
     }
     $.post(taskUrl('pigPetDoMission', body), (err, resp, data) => {
@@ -486,7 +678,6 @@ function pigPetDoMission(mid) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log('pigPetDoMission',data)
             data = JSON.parse(data);
             if (data.resultCode === 0) {
               if (data.resultData.resultCode === 0) {
@@ -515,9 +706,9 @@ function pigPetDoMission(mid) {
 function pigPetMissionList() {
   return new Promise(async resolve => {
     const body = {
-      "source":2,
-      "channelLV":"",
-      "riskDeviceParam":"{}",
+      "source": 2,
+      "channelLV": "",
+      "riskDeviceParam": "{}",
     }
     $.post(taskUrl('pigPetMissionList', body), (err, resp, data) => {
       try {
@@ -560,7 +751,7 @@ function getJumpInfo(juid) {
         'Connection': 'keep-alive',
         'Accept': 'application/json',
         "Cookie": cookie,
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148/application=JDJR-App&deviceId=1423833363730383d273532393d243445364-d224341443d2938333530323445433033353&eufv=1&clientType=ios&iosType=iphone&clientVersion=6.1.70&HiClVersion=6.1.70&isUpdate=0&osVersion=13.7&osName=iOS&platform=iPhone 6s (A1633/A1688/A1691/A1700)&screen=667*375&src=App Store&netWork=1&netWorkType=1&CpayJS=UnionPay/1.0 JDJR&stockSDK=stocksdk-iphone_3.5.0&sPoint=&jdPay=(*#@jdPaySDK*#@jdPayChannel=jdfinance&jdPayChannelVersion=6.1.70&jdPaySdkVersion=3.00.52.00&jdPayClientName=iOS*#@jdPaySDK*#@)',
+        'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
         'Accept-Language': 'zh-cn',
         'Referer': 'https://u1.jr.jd.com/uc-fe-wxgrowing/cloudpig/index/',
         'Accept-Encoding': 'gzip, deflate, br'
@@ -573,7 +764,7 @@ function getJumpInfo(juid) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log('getJumpInfo',data)
+            console.log('getJumpInfo', data)
           } else {
             console.log(`京东服务器返回空数据`)
           }
@@ -610,7 +801,7 @@ function queryMissionReceiveAfterStatus(missionId) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log('queryMissionReceiveAfterStatus',data)
+            console.log('queryMissionReceiveAfterStatus', data)
           } else {
             console.log(`京东服务器返回空数据`)
           }
@@ -648,7 +839,7 @@ function finishReadMission(missionId, readTime) {
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
-            console.log('finishReadMission',data)
+            console.log('finishReadMission', data)
           } else {
             console.log(`京东服务器返回空数据`)
           }
@@ -661,6 +852,8 @@ function finishReadMission(missionId, readTime) {
     })
   })
 }
+
+
 function TotalBean() {
   return new Promise(async resolve => {
     const options = {
@@ -710,16 +903,16 @@ function taskUrl(function_id, body) {
     url: `${JD_API_HOST}/${function_id}?_=${Date.now()}`,
     body: `reqData=${encodeURIComponent(JSON.stringify(body))}`,
     headers: {
-      'Accept' : `*/*`,
-      'Origin' : `https://u.jr.jd.com`,
-      'Accept-Encoding' : `gzip, deflate, br`,
-      'Cookie' : cookie,
-      'Content-Type' : `application/x-www-form-urlencoded;charset=UTF-8`,
-      'Host' : `ms.jr.jd.com`,
-      'Connection' : `keep-alive`,
-      'User-Agent' : `jdapp;android;8.5.12;9;network/wifi;model/GM1910;addressid/1302541636;aid/ac31e03386ddbec6;oaid/;osVer/28;appBuild/73078;adk/;ads/;pap/JA2015_311210|8.5.12|ANDROID 9;osv/9;pv/117.24;jdv/0|kong|t_1000217905_|jingfen|644e9b005c8542c1ac273da7763971d8|1589905791552|1589905794;ref/com.jingdong.app.mall.WebActivity;partner/oppo;apprpd/Home_Main;Mozilla/5.0 (Linux; Android 9; GM1910 Build/PKQ1.190110.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/66.0.3359.126 MQQBrowser/6.2 TBS/044942 Mobile Safari/537.36 Edg/86.0.4240.111`,
-      'Referer' : `https://u.jr.jd.com/`,
-      'Accept-Language' : `zh-cn`
+      'Accept': `*/*`,
+      'Origin': `https://u.jr.jd.com`,
+      'Accept-Encoding': `gzip, deflate, br`,
+      'Cookie': cookie,
+      'Content-Type': `application/x-www-form-urlencoded;charset=UTF-8`,
+      'Host': `ms.jr.jd.com`,
+      'Connection': `keep-alive`,
+      'User-Agent': $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
+      'Referer': `https://u.jr.jd.com/`,
+      'Accept-Language': `zh-cn`
     }
   }
 }
