@@ -6,6 +6,24 @@
     ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|sendNotify|ql"
 
 
+## 2022-2-15更新
+
+删除的我就不列了，太繁琐了，以后再列吧
+
+
+新增 微信签到领红包 jd_wq_wxsign.js
+
+    入口：未知
+
+新增 颜究种植园 jd_xinruimz.js
+
+    入口：美妆馆-种植园 或 https://xinruimz-isv.isvjcloud.com/plantation
+
+
+新增 快递签到 jd_kd.js
+
+    入口：京东app-我的-寄件服务-精彩
+
 
 ## 新版青龙推送说明
 
