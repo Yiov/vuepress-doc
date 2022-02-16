@@ -58,7 +58,7 @@ const JD_API_HOST = 'https://api.m.jd.com/api';
       continue;
     }
     console.log(`\n甘露殿【https://t.me/jdredrain】提醒你:龙王就位:${id}，正在领取${hour}点30分京豆雨\n`);
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < cookiesArr.length; i++) {
       if (cookiesArr[i]) {
         cookie = cookiesArr[i];
         $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
