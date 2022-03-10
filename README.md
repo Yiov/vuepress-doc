@@ -6,6 +6,14 @@
     ql repo https://ghproxy.com/https://github.com/Yiov/dogeast.git "jd_|jx_|jddj_" "" "^jd[^_]|utils|USER_AGENTS|jdCookie|JDJRValidator_Pure|sign_graphics_validate|sendNotify|ql"
 
 
+## :fire: 2022-3-10更新
+
+新增 汪汪乐园 jd_joy_park_Mod.js
+
+    入口：京东极速版-汪汪乐园
+
+
+
 ## 2022-2-15更新
 
 删除的我就不列了，太繁琐了，以后再列吧
