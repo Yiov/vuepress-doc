@@ -458,7 +458,7 @@ function welcomeHome() {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} welcomeHome API请求失败，请检查网路重试`)
+          //console.log(`${$.name} welcomeHome API请求失败，请检查网路重试`)
         } else {
           if (data) {
             data = JSON.parse(data);
