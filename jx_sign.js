@@ -69,7 +69,13 @@ if ($.isNode()) {
           isLoginInfo[$.UserName] = $.isLogin
         }
       }
-      
+      if (i === 0) //console.log(`\n正在收集助力码请等待\n`)
+      if (!isLoginInfo[$.UserName]) continue
+      if (JX_FIRST_RUNTASK === '5') {
+        $.signhb_source = '5'
+      } else if (JX_FIRST_RUNTASK === '1000') {
+        $.signhb_source = '1000'
+      }
       await signhb(1)
       await $.wait(500)
     }
@@ -133,7 +139,7 @@ async function main(help = true) {
   $.commonlist = []
   $.bxNum = []
   $.black = false
-  $.canHelp = true
+  $.canHelp = false
   await signhb(2)
   await $.wait(2000)
   if (!$.sqactive && $.signhb_source === '5') {
@@ -142,7 +148,7 @@ async function main(help = true) {
   }
   
   if (!$.black) {
-    
+    //await helpSignhb()
     if ($.commonlist && $.commonlist.length) {
       console.log(`开始做${$.taskName}任务`)
       for (let j = 0; j < $.commonlist.length && !$.black; j++) {
@@ -253,7 +259,6 @@ function signhb(type = 1) {
 }
 
 
-
 // 任务
 function dotask(task) {
   let functionId, body;
@@ -292,14 +297,16 @@ function dotask(task) {
 
 // 宝箱
 function bxdraw() {
-  let body;
+  let functionId, body;
   if ($.signhb_source === '5') {
+    functionId = "signhb/bxdraw_jxpp"
     body = `ispp=1&sqactive=${$.sqactive}&tk=`
   } else {
+    functionId = "signhb/bxdraw"
     body = `ispp=0&sqactive=&tk=`
   }
   return new Promise((resolve) => {
-    $.get(taskUrl("signhb/bxdraw", body), async (err, resp, data) => {
+    $.get(taskUrl(functionId, body), async (err, resp, data) => {
       try {
         if (err) {
           console.log(JSON.stringify(err));
