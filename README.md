@@ -8,26 +8,19 @@
 
 
 
-
-
-
-
-
-
-
-
 ## 特殊脚本使用说明
 
-jd_enen.js
+**嗯嗯 jd_enen.js**
 
-jd_wskey_logout.js
+说明：一键让CK失效，若无需要请禁用
 
+**注销所有 WSKEY jd_wskey_logout.js**
 
-wskey失效脚本
+说明：wskey一键失效脚本
 
-    export JD_WSCK_LOGOUT=pin 退出指定账户
+    export JD_WSCK_LOGOUT=pin #退出指定账户
 
-    export JD_WSCK_LOGOUT=ALL 退出所有 CK 有效的账户（必须大写）
+    export JD_WSCK_LOGOUT=ALL #退出所有CK有效的账户（必须大写）
 
 
 
@@ -39,6 +32,8 @@ wskey失效脚本
 
 | 名称 | 脚本名 | 常规入口 | 其他说明 |
 | :-: | :-: | :-: | :-: |
+| **★京东临时活动** |
+| 超级盲盒 | jd_supermh.js | 京东APP-我的-超级盲盒 | 截止6.18 |
 | **★京东相关工具** |
 | 京东多合一签到 | jd_bean_sign.js | - | - |
 | 京东资产变动 | jd_bean_change.js | - | - |
@@ -46,10 +41,11 @@ wskey失效脚本
 | 清空购物车 | jd_cleancart.js | - | export JD_CART="true" |
 | 电脑配件类活动 | jd_computer.js | - | export computer_activityId="16" |
 | 店铺签到 | jd_dpqd.js | - | export DPQDTK="token1&token2" |
+| 超级无线电偶 | jd_sevenDay.js | - | 需要填写变量 |
 | 京豆兑换为喜豆 | jd_exchangejxbeans.js | - | 仅7天内即将过期的京豆 |
 | 盲盒任务抽京豆 | jd_mhtask.js | - | export jd_mhurlList="1@2" |
-| 超级无线电偶 | jd_sevenDay.js | - | export jd_mhurlList="1@2" |
 | 京东签到翻牌 | jd_sign_graphics.js | - | - |
+| 京洞察问卷通知 | jd_insight.js | - | - |
 | **★京东** |
 | 特物Z签到 | jd_superBrandSign.js | 京东APP首页-下拉 | - |
 | 特物Z集卡 | jd_superBrandJK.js | 京东APP首页-下拉 | - |
@@ -74,6 +70,7 @@ wskey失效脚本
 | 闪购盲盒 | jd_sgmh.js | 京东APP-闪购-右下惊喜盒子 | - |
 | 京东保价 | jd_price.js | 京东APP-我的-客户服务-价格保护 | - |
 | 众筹许愿池 | jd_wish.js | 京东APP-京东众筹-众筹许愿池 | 类似的活动也可 |
+| 头文字J | jd_carplay.js | 京东APP-京东汽车-领京豆 | CK1助力作者 其他助力CK1 |
 | **★京东金融** |
 | 金融养猪 | jd_pigPet.js | 京东金融-养猪猪 | - |
 | **★京东小程序** |
@@ -97,104 +94,6 @@ wskey失效脚本
 | |
 
 
-
-
-## 一对一推送使用
-
-使用的是【@ccwav】大佬的脚本，必备ql.js和sendNotify.js
-
-
-配合CK_WxPusherUid.json的推送模板即可
-
-（*如果使用了Nvjdc则无用自己新建模板，对接好就可以了）
-
-
-### 1.创建应用获取apptoken
-
-
-Wxpusher官网，按照文档创建应用，Uid获取
-
-    https://wxpusher.zjiecode.com/docs/#/
-
-
-应用名字/联系方式/推送内容说明，随便写，后面可以改的，先测试
-
-创建成功后复制apptoken！！！很重要！！！只显示1次！！！在青龙添加环境变量
-
-    export WP_APP_TOKEN_ONE="这里填apptoken"
-
-注：要是忘了apptoken，只能应用管理-apptoken重置
-
-
-### 2.获取UID
-
-在应用管理-关注应用，获取动态关注链接，发给好友扫码关注
-
-关注成功后在用户管理-用户列表查看用户的UID
-
-
-
-### 3.创建/修改模板
-
-在Scripts/Yiov_dogeast文件夹里新建一个文件CK_WxPusherUid.json
-
-复制下面代码（或者直接在repo文件夹里复制过来）
-
-    [
-      {
-        "pt_pin": "jd_******",
-        "Uid": "UID_**********"
-      },
-      {
-        "pt_pin": "jd_******",
-        "Uid": "UID_**********"
-      }
-    ]
-
-
-注：JD账号和Uid账号一一对应，一个花括号{},为一个账号的结尾，多账号的自己挨个复制
-
-修改好后保存即可
-
-
-
-
-
-
-### 京东资产推送 jd_bean_change.js 
-
-使用的是【@ccwav】大佬的脚本，挑的自己喜欢的变量
-
-     export BEANCHANGE_ALLNOTIFY="ccwav 虽然头发块掉光了&可是还是很帅啊...&&不说了，我去哭会...."
-
-说明：设置推送置顶公告，&表示换行，公告会出现在资产通知中(包括一对一)
-
-    显示:
-    	
-    【✨✨✨✨公告✨✨✨✨】
-    ccwav 虽然头发块掉光了
-    可是还是很帅啊...
-    	 
-    不说了，我去哭会.... 
-
-
-
-
-### 推送通知 sendNotify.js
-
-使用的是【@ccwav】大佬的脚本，挑的自己喜欢的变量
-
-指定通知底部显示 本通知 By 后面显示的字符,默认是ccwav Mod
-
-    export NOTIFY_AUTHOR="***"
-
-屏蔽任务脚本的ck失效通知
-
-    export NOTIFY_NOCKFALSE="true"
-
-当接收到发送CK失效通知和Ninja，运行通知时候执行子线程任务
-
-    export NOTIFY_CKTASK="jd_CheckCK.js"
 
 
 
