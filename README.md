@@ -46,12 +46,16 @@
 | 盲盒任务抽京豆 | jd_mhtask.js | - | export jd_mhurlList="1@2" |
 | 京东签到翻牌 | jd_sign_graphics.js | - | - |
 | 京洞察问卷通知 | jd_insight.js | - | - |
+| joy抽奖机通用 | jd_lottery.js | - | export JD_Lottery="ID1@ID2" |
+| 批量取关京东店铺和商品 | jd_unsubscribe.js | - | - |
 | **★京东** |
 | 特物Z签到 | jd_superBrandSign.js | 京东APP首页-下拉 | - |
 | 特物Z集卡 | jd_superBrandJK.js | 京东APP首页-下拉 | - |
 | 领京豆 | jd_bean_home.js | 京东APP首页-领京豆 | - |
 | 种豆得豆 | jd_plantBean.js | 京东APP首页-领京豆-种豆得豆 | - |
 | 领金贴 | jd_jin_tie.js | 京东APP首页-领金贴 | - |
+| 签到领现金 | jd_cash_windfgg.js | 京东APP首页-领现金 | 需要获取token |
+| 京东直播 | jd_live.js | 京东APP首页-京东直播 | - |
 | 金榜创造营 | jd_gold_creator.js | 京东APP-排行榜-右侧悬浮 | 任务做了不涨豆 |
 | 宠汪汪喂食 | jd_joy_feedPets.js | 京东APP-我的-宠汪汪 | - |
 | 东东萌宠 | jd_pet.js | 京东APP-我的-东东萌宠 | - |
