@@ -48,6 +48,8 @@
 | 京洞察问卷通知 | jd_insight.js | - | - |
 | joy抽奖机通用 | jd_lottery.js | - | export JD_Lottery="ID1@ID2" |
 | 批量取关京东店铺和商品 | jd_unsubscribe.js | - | - |
+| 关注有礼 | jd_pkc_gzyl.js | - | export PKC_GZYL="" |
+| 关注有礼特效 | jd_pkc_txgzyl.js | - | export PKC_TXGZYL="" |
 | **★京东** |
 | 特物Z签到 | jd_superBrandSign.js | 京东APP首页-下拉 | - |
 | 特物Z集卡 | jd_superBrandJK.js | 京东APP首页-下拉 | - |
