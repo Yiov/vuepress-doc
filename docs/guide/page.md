@@ -1,7 +1,7 @@
 # 页面
 
 ::: warning 更新时间
-最近更新：2023-7-15
+最近更新：2023-8-11
 
 搭建版本：v2.0-beta.66
 :::
@@ -414,7 +414,7 @@ export default {
 export default {
   theme: defaultTheme({
     sidebar: {
-      '/guide/': [
+      '/guide': [
         {
           text: '指南',
           children: ['/guide/README.md', '/guide/getting-started.md', '/guide/configuration.md', '/guide/page.md',],
