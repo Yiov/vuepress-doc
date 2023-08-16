@@ -1,7 +1,7 @@
 # 页面
 
 ::: warning 更新时间
-最近更新：2023-8-11
+最近更新：2023-8-16
 
 搭建版本：v2.0-beta.66
 :::
@@ -257,7 +257,7 @@ navbar: [
 
 ### 导航数组
 
-将原先的 `link: '/guide/'` 改成 `children: ['*.md']` ，如下
+将原先的 `link: '/guide/'` 改成 `children: ['']` ，如下
 
 ::: tip 说明
 `children` 内包含都是md文件，自己按顺序列出即可
@@ -275,7 +275,7 @@ navbar: [
       {
         text: '🧝 指南',
         //link: '/guide/'
-        children: ['/guide/README.md', '/guide/getting-started.md', '/guide/configuration.md','/guide/page.md']
+        children: ['/guide/', '/guide/getting-started', '/guide/configuration','/guide/page']
       },
     ],
   }),
@@ -306,7 +306,7 @@ navbar: [
             //第1组名称(不可点击)
             text: '教程参考',
             //第1组导航标签
-            children: ['/guide/README.md', '/guide/getting-started.md', '/guide/configuration.md','/guide/page.md']
+            children: ['/guide/', '/guide/getting-started', '/guide/configuration','/guide/page']
           }
          ],
       },
@@ -361,7 +361,7 @@ export default {
   theme: defaultTheme({
     sidebar: [
       //这里填文件路径
-      '/guide/README.md', '/guide/getting-started.md', '/guide/configuration.md', '/guide/page.md'
+      '/guide/', '/guide/getting-started', '/guide/configuration', '/guide/page'
     ],
   }),
 }
@@ -383,7 +383,7 @@ export default {
       {
         text: '指南',
         link: '/guide/',
-        children: ['/guide/README.md', '/guide/getting-started.md', '/guide/configuration.md', '/guide/page.md',
+        children: ['/guide/', '/guide/getting-started', '/guide/configuration', '/guide/page',
         {
           //子目录远程引用
           text: 'github',
@@ -417,7 +417,7 @@ export default {
       '/guide': [
         {
           text: '指南',
-          children: ['/guide/README.md', '/guide/getting-started.md', '/guide/configuration.md', '/guide/page.md',],
+          children: ['/guide/', '/guide/getting-started', '/guide/configuration', '/guide/page',],
           collapsible: true, //折叠开关
         },
       ],

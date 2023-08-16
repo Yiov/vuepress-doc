@@ -5,27 +5,28 @@ export const sidebarA: SidebarConfig = [
     text: '介绍',
     link: '/guide/',
     children: [
-      '/guide/README.md', 
+      '/guide/', 
     ],
   },
   {
     text: '基础配置',
     link: '/guide/',
     children: [
-      '/guide/getting-started.md', 
-      '/guide/configuration.md', 
-      '/guide/page.md',
-      '/guide/frontmatter.md',
+      '/guide/getting-started', 
+      '/guide/configuration', 
+      '/guide/page',
+      '/guide/frontmatter',
     ],
   },
   {
     text: '进阶玩法',
     link: '/guide/',
     children: [
-      '/guide/markdown.md',
-      '/guide/assets.md',
-      '/guide/beautification.md', 
-      '/guide/plugin.md', 
+      '/guide/markdown',
+      '/guide/assets',
+      '/guide/beautification', 
+      '/guide/plugin', 
+      '/guide/components', 
     ],
   },
   {

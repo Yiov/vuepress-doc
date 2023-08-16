@@ -1,12 +1,14 @@
 import { defaultTheme } from 'vuepress'
-import { getDirname, path } from '@vuepress/utils'
 import { externalLinkIconPlugin } from '@vuepress/plugin-external-link-icon'
 import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics'
 import { docsearchPlugin } from '@vuepress/plugin-docsearch'
 import { copyCodePlugin } from 'vuepress-plugin-copy-code2'
 import { sidebarA } from './configs/index.js'
-
+import { registerComponentsPlugin } from '@vuepress/plugin-register-components'
+import { getDirname, path } from '@vuepress/utils'
 const __dirname = getDirname(import.meta.url)
+
+//pnpm add -D @vuepress/utils @vuepress/plugin-external-link-icon @vuepress/plugin-google-analytics @vuepress/plugin-docsearch @algolia/client-search search-insights vuepress-plugin-copy-code2 @vuepress/plugin-register-components less
 
 export default {
   lang: 'zh-CN',
@@ -55,11 +57,11 @@ export default {
             text: '基础配置',
             //第1组导航标签
             children: [
-              '/guide/README.md', 
-              '/guide/getting-started.md', 
-              '/guide/configuration.md',
-              '/guide/page.md',
-              '/guide/frontmatter.md',
+              '/guide/', 
+              '/guide/getting-started', 
+              '/guide/configuration',
+              '/guide/page',
+              '/guide/frontmatter',
             ]
           },
           {
@@ -67,10 +69,11 @@ export default {
             text: '进阶玩法',
             //第1组导航标签
             children: [
-              '/guide/markdown.md', 
-              '/guide/assets.md', 
-              '/guide/beautification.md', 
-              '/guide/plugin.md', 
+              '/guide/markdown', 
+              '/guide/assets', 
+              '/guide/beautification', 
+              '/guide/plugin', 
+              '/guide/components', 
             ]
           },
           {
@@ -91,7 +94,7 @@ export default {
       },
       {
         text: 'GitHub',
-        link: 'https://github.com/Yiov/vuepressdoc',
+        link: 'https://github.com/Yiov/vuepress-doc',
       },
     ],
 
@@ -160,6 +163,13 @@ export default {
     }),
 
 
+    //组件注册
+    registerComponentsPlugin({
+      componentsDir: path.resolve(__dirname, './components'),
+    }),
+
+
+
   ],
 
   //markdown路径
@@ -171,6 +181,7 @@ export default {
     },
   },
 
+  
   
 
 
