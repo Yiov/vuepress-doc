@@ -25,6 +25,7 @@ export const sidebarA: SidebarConfig = [
       '/guide/markdown',
       '/guide/assets',
       '/guide/beautification', 
+      '/guide/docsearch', 
       '/guide/plugin', 
       '/guide/components', 
     ],

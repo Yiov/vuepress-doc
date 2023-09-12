@@ -1,9 +1,9 @@
 # 页面
 
 ::: warning 更新时间
-最近更新：2023-8-16
+最近更新：2023-9-11
 
-搭建版本：v2.0-beta.66
+搭建版本：v2.0-beta.67
 :::
 
 
@@ -139,6 +139,28 @@ export default {
 :::
 
 
+### 深浅模式
+
+默认好像是深色，我们可以自己改成浅色
+
+```ts{3}
+export default {
+  theme: defaultTheme({
+    colorMode: 'light', //浅色模式，默认auto，还有dark
+  }),
+}
+```
+
+不想要切换开关，可以关闭
+
+```ts{3}
+export default {
+  theme: defaultTheme({
+    colorModeSwitch: false, //关闭深浅模式开关
+  }),
+}
+```
+
 
 ### 搜索框
 
@@ -149,7 +171,7 @@ export default {
 
 所以，等我们网站搭建完毕后再去提交网址
 
-[☛ 点我查看具体步骤](../guide/plugin.md#docsearch)
+[☛ 点我查看具体步骤](../guide/docsearch)
 :::
 
 
