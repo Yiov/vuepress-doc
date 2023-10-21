@@ -90,7 +90,7 @@ export default {
          ],
       },
       {
-        text: 'VuePress',
+        text: 'VuePress v2.0.0-beta.66',
         link: 'https://v2.vuepress.vuejs.org/zh/',
       },
       {
