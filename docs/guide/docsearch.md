@@ -96,16 +96,13 @@ export default {
 
 
 ::: tip 区别
-自行申请：可使用algolia官方的爬虫，但是需要提交公开仓库代码链接
+自行申请：可使用algolia官方的爬虫，但是需要提交公开仓库代码链接并通过
 
 自行爬取：需有一定动手能力，自行搭建爬虫，不需要提交仓库代码链接
 :::
 
 
-## 自行申请
-
-
-### 提交申请
+### 自行申请
 
 DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com/)
 
@@ -122,8 +119,6 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 ![](./vuepress-51.png)
 
-
-### 邀请注册
 
 等待6-7小时，邮件发送过来
 
@@ -150,7 +145,6 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 ![](./vuepress-54.png)
 
 
-### 爬取数据
 
 问题来了，这里的索引 `records` 值为0，没有数据，爬取数据有问题
 
@@ -207,15 +201,13 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 ![](./vuepress-63.png)
 
-最后，回到主页查看API KEYS，这里我们将 `Search API Key` 填入 `config.ts` 
+最后，回到 查看API KEYS，这里我们将 `Search API Key` 填入 `config.ts` 
 
 ![](./vuepress-64.png)
 
 ![](./vuepress-65.png)
 
 
-
-### 搜索测试
 
 本地搜索一下，可以使用了
 
@@ -231,12 +223,10 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 
 
-## 自行爬取
+### 自行爬取
 
 有点耐心看，我都一步步截图了
 
-
-### 注册账号
 
 [Algolia官网](https://www.algolia.com/) 注册并登录账号
 
@@ -248,9 +238,8 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 ![](./vuepress-67.png)
 
 
-### 创建应用
 
-注册好后，我们在设置里新建一个Application
+注册好后，我们在设置里新建一个Application应用
 
 ::: tip 说明
 系统会默认给我们建一个，也是可以用的
@@ -290,9 +279,9 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 ![](./vuepress-74.png)
 
 
-### 创建索引
 
-右下角选择 Date Sources - Indices - Create Index
+
+右下角创建索引，选择 Date Sources - Indices - Create Index
 
 ![](./vuepress-75.png)
 
@@ -322,15 +311,18 @@ indexName：索引名
 ![](./vuepress-78.png)
 
 
-最后就是爬取数据了，二选一
+
+
+## 爬取数据
+
+此方式仅演示 [自行爬取](#自行爬取) 后的方式，二选一
 
 ::: tip 说明
 我就是被这个整崩溃了，爬取的索引就是用不了，累计耗时半个月，才搞清里面的逻辑
 :::
 
 
-
-### Docker爬取数据
+### Docker
 
 ::: warning 选其一
 这个和 [Github Actions爬取数据](#github-actions爬取数据) 任选其一
@@ -377,40 +369,47 @@ jq --version
 于是对照着 [algolia官方旧文档](https://docsearch.algolia.com/docs/legacy/run-your-own/) 挨个试
 
 最后审查元素发现，有个facetFliter里有个lang， 同时vuepress官方也指出 `attributesForFaceting` 必须包含 `lang` 否则无法使用
-:::
 
 ![](./vuepress-82.png)
+:::
 
-```json{2,4}
+
+
+```json{2,5,32}
 {
-  "index_name": "你的索引名",
-  "start_urls": [
-    "https://你的网址.com/"
-  ],
-  "stop_urls": [""],
-  "selectors": {
-    "lvl0": {
-      "selector": ".sidebar-heading.active",
-      "global": true,
-      "default_value": "Documentation"
+    "index_name": "你的索引名",
+    "start_urls": [
+        {
+            "url": "https://你的网址.com/",
+            "selectors_key": ""
+        }
+    ],
+    "stop_urls": [],
+    "selectors": {
+        "default": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "我的文档"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        }
     },
-    "lvl1": ".theme-default-content h1",
-    "lvl2": ".theme-default-content h2",
-    "lvl3": ".theme-default-content h3",
-    "lvl4": ".theme-default-content h4",
-    "lvl5": ".theme-default-content h5",
-    "text": ".theme-default-content p, .theme-default-content li",
-    "lang": {
-      "selector": "/html/@lang",
-      "type": "xpath",
-      "global": true
+    "custom_settings": {
+        "attributesForFaceting": [
+            "lang"
+        ]
     }
-  },
-  "custom_settings": {
-    "attributesForFaceting": [
-      "lang"
-    ]
-  }
 }
 ```
 
@@ -419,8 +418,6 @@ jq --version
 
 ::: tip 说明
 `stop_urls` 表示的是爬虫不爬取的链接
-
-因为我的vuepress单独做了索引，不需要就屏蔽掉了
 :::
 
 
@@ -468,7 +465,7 @@ docker run -it --env-file=/root/docsearch/.env -e "CONFIG=$(cat /root/docsearch/
 
 
 
-### Github Actions爬取数据
+### Github Actions
 
 
 ::: warning 推荐
@@ -572,50 +569,62 @@ jobs:
 
 然后在根目录新建一个 `docsearch.json` 文件，复制粘贴并提交
 
-::: tip 说明
-记得把索引和网址都改成自己的
-:::
-
 ![](./vuepress-92.png)
 
-```json{2,4}
+
+::: tip 说明
+只需要修改 `index_name` 和 `startUrls` 其余选项可保持默认
+
+
+`stop_urls` 表示的是爬虫不爬取的链接
+:::
+
+
+```json{2,5,32}
 {
-  "index_name": "你的索引名",
-  "start_urls": [
-    "https://你的网址.com/"
-  ],
-  "stop_urls": [""],
-  "selectors": {
-    "lvl0": {
-      "selector": ".sidebar-heading.active",
-      "global": true,
-      "default_value": "Documentation"
+    "index_name": "你的索引名",
+    "start_urls": [
+        {
+            "url": "https://你的网址.com/",
+            "selectors_key": ""
+        }
+    ],
+    "stop_urls": [],
+    "selectors": {
+        "default": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "我的文档"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        }
     },
-    "lvl1": ".theme-default-content h1",
-    "lvl2": ".theme-default-content h2",
-    "lvl3": ".theme-default-content h3",
-    "lvl4": ".theme-default-content h4",
-    "lvl5": ".theme-default-content h5",
-    "text": ".theme-default-content p, .theme-default-content li",
-    "lang": {
-      "selector": "/html/@lang",
-      "type": "xpath",
-      "global": true
+    "custom_settings": {
+        "attributesForFaceting": [
+            "lang"
+        ]
     }
-  },
-  "custom_settings": {
-    "attributesForFaceting": [
-      "lang"
-    ]
-  }
 }
 ```
+
+
 ![](./vuepress-93.png)
 
 ![](./vuepress-94.png)
 
 
-然后再在仓库 - 设置 - Secrets and variables - actions，新增仓库秘钥
+然后在仓库 - 设置 - Secrets and variables - actions，新增仓库秘钥
 
 ![](./vuepress-95.png)
 
@@ -647,98 +656,435 @@ API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
 
 ![](./vuepress-99.png)
 
-折腾了半天发现，并没有解决
-
-找到了一个 [相对完善的解答：@How to setup Algolia DocSearch](https://www.howtocode.io/posts/algolia/how-to-setup-algolia-doc-search#doc-search-config) ，但是依然没搞定，这个放在以后弄吧
+经过对 [Algolia官方文档](https://docsearch.algolia.com/docs/legacy/config-file/) 进行查阅，找到了方法
 
 
+::: danger 注意
+为了更直观的查看，我贴出自己的索引规则讲解
 
-:::: details 初步尝试 失败
+---
 
-我们将在原本的 `start_urls` 和 `selectors` 里变更
+`selectors_key` 和 `tags` 配合使用，可以为我们的搜索结果分类
 
-这里我们添加一个选择词 `selectors_key` 和标签
+然后在 `selectors` 一一对应，`selector` 留空，`default_value` 为我们的分类标签命名
 
-```json
-/* 原来的
-"start_urls": [
-  "https://yiov.github.io/"
-],
-*/
-//现在的，使用的时候删掉这段注释
-"start_urls": [
-    "https://yiov.github.io/",
-    {
-      "url": "https://yiov.github.io/gfw",
-      "selectors_key": "gfw",
-      "tags": ["gfw"]
-    }
-  ],
-```
+`default` 是系统默认搜索结果，必须存在！！！
 
-然后创建一个相对应的选择对象，并将 `selector` 留空， `default_value` 为搜索结果的标题
-
-::: warning 注意
-这里除了我创建的 `gfw` ，还有个 `default` ，是默认的必须要带，是搜索除了gfw以外的所有对象
+另 `attributesForFaceting` 最后的必须包含 `tags` 和 `lang`
 :::
 
-```json
-/* 原来的
-"selectors": {
-    "lvl0": {
-      "selector": ".sidebar-heading.active",
-      "global": true,
-      "default_value": "Documentation"
+
+```json{2,5-7,18,21,36,39,57,75-76}
+{
+    "index_name": "yiov",
+    "start_urls": [
+        {
+            "url": "https://vuepress.yiov.top/guide/getting-started.html",
+            "selectors_key": "getting-started",
+            "tags": ["getting-started"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/configuration.html",
+            "selectors_key": "configuration",
+            "tags": ["configuration"]
+        },
+        "https://vuepress.yiov.top/"
+    ],
+    "stop_urls": [""],
+    "selectors": {
+        "getting-started": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "快速上手"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "configuration": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "配置"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "default": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "我的文档"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        }
     },
-    "lvl1": ".theme-default-content h1",
-    "lvl2": ".theme-default-content h2",
-    "lvl3": ".theme-default-content h3",
-    "lvl4": ".theme-default-content h4",
-    "lvl5": ".theme-default-content h5",
-    "text": ".theme-default-content p, .theme-default-content li",
-    "lang": {
-      "selector": "/html/@lang",
-      "type": "xpath",
-      "global": true
+    "custom_settings": {
+      "attributesForFaceting": [
+        "lang",
+        "tags"
+      ]
     }
-  },
-*/
-//现在的，使用的时候删掉这段注释
-"selectors": {
-    "gfw": {
-      "lvl0": {
-        "selector": "  ",
-        "global": true,
-        "default_value": "科学上网"
-      },
-      "lvl1": ".theme-default-content h1",
-    "lvl2": ".theme-default-content h2",
-    "lvl3": ".theme-default-content h3",
-    "lvl4": ".theme-default-content h4",
-    "lvl5": ".theme-default-content h5",
-    "text": ".theme-default-content p, .theme-default-content li"
-    },
-    "default": {
-      "lvl0": {
-        "selector": "",
-        "global": true,
-        "default_value": "文档"
-      },
-      "lvl1": ".theme-default-content h1",
-      "lvl2": ".theme-default-content h2",
-      "lvl3": ".theme-default-content h3",
-      "lvl4": ".theme-default-content h4",
-      "lvl5": ".theme-default-content h5",
-      "text": ".theme-default-content p, .theme-default-content li",
-      "lang": {
-        "selector": "/html/@lang",
-        "type": "xpath",
-        "global": true
-      }
-    }
-  },
+}
 ```
-::::
+
+### index_name
+
+索引名
+
+### start_urls
+
+爬取链接，可以通过 `selectors_key` 和 `tags` 进行分类
+
+格式：
+
+```json
+"start_urls": [
+  {
+    "url": "https://你的链接.com",
+    "selectors_key": "", //关键词
+    "tags": [""], //打标签
+    "page_rank": 1 //当前索引搜索排序
+    },
+]
+```
+
+### stop_urls
+
+禁止爬取的链接
+
+格式：
+
+```json
+"stop_urls": ["https://www.example.com/docs/index.html", "license.html"]
+```
+
+
+### default_value
+
+分类后默认显示的值
+
+
+
+### 显示效果
+
+
+我们修改好后重新爬取，也可以用官方的 [docsearchjs-v3-playground](https://codesandbox.io/s/docsearchjs-v3-playground-z9oxj?file=/src/index.js) 查看效果
+
+
+我贴自己的参数，可以供你们参考
+
+
+```ts{2-4}
+docsearchPlugin({
+  appId: "NR5QNPJN44",
+  apiKey: "1f28f6ca8aad82e405dc4741a517e9d9",
+  indexName: "yiov",
+}),
+```
+
+![](./vuepress-103.png)
+
+
+
+::: details 点我查看 我的完整的配置
+```json
+{
+    "index_name": "yiov",
+    "start_urls": [
+        {
+            "url": "https://vuepress.yiov.top/guide/getting-started.html",
+            "selectors_key": "getting-started",
+            "tags": ["getting-started"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/configuration.html",
+            "selectors_key": "configuration",
+            "tags": ["configuration"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/page.html",
+            "selectors_key": "page",
+            "tags": ["page"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/frontmatter.html",
+            "selectors_key": "frontmatter",
+            "tags": ["frontmatter"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/markdown.html",
+            "selectors_key": "markdown",
+            "tags": ["markdown"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/assets.html",
+            "selectors_key": "assets",
+            "tags": ["assets"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/beautification.html",
+            "selectors_key": "beautification",
+            "tags": ["beautification"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/docsearch.html",
+            "selectors_key": "docsearch",
+            "tags": ["docsearch"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/plugin.html",
+            "selectors_key": "plugin",
+            "tags": ["plugin"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/components.html",
+            "selectors_key": "components",
+            "tags": ["components"]
+        },
+        "https://vuepress.yiov.top/"
+    ],
+    "selectors": {
+        "getting-started": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "快速上手"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "configuration": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "配置"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "page": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "页面"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "frontmatter": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "Frontmatter"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "markdown": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "Markdown"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "assets": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "静态部署"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "beautification": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "样式美化"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "docsearch": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "Docsearch"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "plugin": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "插件"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "components": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "组件"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "default": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "我的文档"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        }
+    },
+    "custom_settings": {
+      "attributesForFaceting": [
+        "lang",
+        "tags"
+      ]
+    }
+}
+
+
+```
+:::
+
+
 
 
 
