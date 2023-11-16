@@ -1,14 +1,17 @@
 # 配置
 
-::: warning 更新时间
-最近更新：2023-7-15
+> 最近更新：2023-11-15
 
-搭建版本：v2.0-beta.66
-:::
 
 完成搭建后，我们就对页面进行配置
 
 ## 站点配置
+
+我们安装了vscode，直接用它打开 `通过code打开`，新建`config.ts`文件
+
+> 鼠标右键没有，是因为你没有[安装vscode](https://yiov.top/daily/VSCode/)
+
+![](./vuepress-13.png)
 
 在`.vuepress`目录下创建一个 `config.ts`文件
 
@@ -20,7 +23,7 @@ JavaScript 格式为 config.js
 TypeScript 格式为 config.ts
 :::
 
-```
+```md{3}
 ├─ docs
 │  ├─ .vuepress
 │  │  └─ config.ts   <--- 配置文件
@@ -29,18 +32,13 @@ TypeScript 格式为 config.ts
 └─ package.json
 ```
 
-我们安装了vscode，直接用它打开 `通过code打开`，新建`config.ts`文件
-
-> 鼠标右键没有，是因为你没有[安装vscode](https://yiov.top/daily/VSCode/)
-
-![](./vuepress-13.png)
-
 ![](./vuepress-14.png)
 
 
 复制下面代码，粘贴并保存！
 
 ```ts
+// .vuepress/config.ts
 import { defaultTheme } from 'vuepress'
 
 export default {
@@ -57,33 +55,30 @@ export default {
 :::: code-group
 ::: code-group-item pnpm
 ```sh
-#开发环境
 pnpm docs:dev
 ```
 :::
 ::: code-group-item yarn
 ```sh
-#开发环境
 yarn docs:dev
 ```
 :::
 ::: code-group-item npm
 ```sh
-#开发环境
 npm docs:dev
 ```
 :::
 ::::
 
-::: tip 使用说明
-每次配置完都需要重启才能生效
 
-方向键 `↑键` ，可快捷调用上次命令
-:::
 
 ![](./vuepress-16.png)
 
-标签栏位置就有变化了
+::: tip 快捷使用说明
+方向键 `↑键` ，可快速调用上次命令
+:::
+
+标签栏就有变化了，这样我们基础配置完成了
 
 ![](./vuepress-17.png)
 

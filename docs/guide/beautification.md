@@ -1,12 +1,9 @@
 # 样式美化
 
-::: warning 更新时间
-最近更新：2023-7-15
+> 最近更新：2023-7-15
 
-搭建版本：v2.0-beta.66
-:::
 
-## Palette 文件
+## Palette文件
 
 ::: tip 说明
 若无必要，不建议修改
@@ -14,7 +11,7 @@
 修改方式请参照style，一样的
 :::
 
-```目录
+```md{4}
 ├─ docs
 │  ├─ .vuepress
 │  │  └─ styles
@@ -34,7 +31,7 @@ $MQMobileNarrow: 419px !default;
 :::
 
 
-## Style 文件
+## Style文件
 
 我们可以通过css变量覆盖默认主题的css变量
 
@@ -42,7 +39,7 @@ $MQMobileNarrow: 419px !default;
 官方给的路径，是让我们新建一个 `styles` 文件夹，然后新建一个 `index.scss` 文件
 :::
 
-```目录
+```md{3-4}
 ├─ docs
 │  ├─ .vuepress
 │  │  └─ styles
@@ -306,8 +303,8 @@ export default {
   head: [['link', 
   //favicon图标
   { rel: 'icon', href: '/images/logo.png' },
-  //自定义css样式
-  { rel: 'stylesheet', href: '/styles/index.scss' },
+  // 自定义css样式
+  // { rel: 'stylesheet', href: '/styles/index.scss' },
 ]],
 }
 ```
@@ -319,7 +316,7 @@ export default {
 style代码里不要含有//等注释符号
 :::
 
-```scss
+```md
 <style>
 :root {
     --c-brand: #046abd;
@@ -345,7 +342,7 @@ style代码里不要含有//等注释符号
 我们以`侧边栏导航`为例，看目录
 
 
-```目录
+```md{4-5}
 ├─ docs
 │  ├─ .vuepress
 │  │  └─ configs
@@ -433,7 +430,7 @@ export default {
 
 我们以 `主页` 布局演示
 
-```目录
+```md{3-4}
 ├─ docs
 │  ├─ .vuepress
 │  │  └─ components
@@ -441,16 +438,33 @@ export default {
 └─ README.md
 ```
 
-新建一个 `components` 文件夹，再新建一个 `MyHome.vue` 文件
+新建一个 `components` 文件夹，再新建一个 `MyHome.vue` 文件，然后写入你想要的组件内容
 
-在 `MyHome.vue` 文件中写入
-
-
-默认主题将所有非全局的组件都注册了一个带 `@theme` 前缀的 `alias` 
+如何使用呢，由于默认主题将所有 [非全局的组件](https://github.com/vuepress/vuepress-next/tree/main/ecosystem/theme-default/src/client/components) 都注册了一个带 `@theme` 前缀的 `alias` 
 
 ::: tip 说明
-例如，Home.vue 的别名是 @theme/Home.vue
+例如：`HomeFooter.vue` 的别名是 `@theme/HomeFooter.vue`
+
+那么我用自己写的 `MyHome.vue` 替换 `HomeFooter.vue` 这样写配置
 :::
+
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm add -D @vuepress/utils@next
+```
+:::
+::: code-group-item yarn
+```sh
+yarn add -D @vuepress/utils@next
+```
+:::
+::: code-group-item npm
+```sh
+npm i -D @vuepress/utils@next
+```
+:::
+::::
 
 ```ts{7-14}
 import { getDirname, path } from '@vuepress/utils'
@@ -461,7 +475,7 @@ export default ({
   theme: defaultTheme {},
   //组件覆盖
   alias: {
-    '@theme/HomeFooter.vue': path.resolve(__dirname, './components/MyHomeFooter.vue'),
+    '@theme/HomeFooter.vue': path.resolve(__dirname, './components/MyHome.vue'),
   },
 })
 ```

@@ -1,16 +1,19 @@
+---
+next:
+  text: Markdown
+  link: /guide/markdown
+---
+
 # Frontmatter
 
-::: warning 更新时间
-最近更新：2023-7-15
+> 最近更新：2023-7-15
 
-搭建版本：v2.0-beta.66
-:::
 
-我们可以通过 `Frontmatter` 来覆盖当前页面的 `lang`, `title`, `description` 等属性
 
-从而建立一个专属自己的主页
+## 基本示例
 
-基本的示例：
+我们可以通过 `Frontmatter` 来覆盖当前页面的 `lang`, `title`, `description` 等属性，从而建立一个专属自己的主页
+
 
 ```md
 ---
@@ -24,7 +27,7 @@ description: 页面的描述
 
 
 
-### 设置首页
+## 设置首页
 
 设定该页面是 `首页` 还是 `普通页面`
 
@@ -46,7 +49,7 @@ home: true
 
 
 
-### 图片路径
+## 图片路径
 
 默认的路径是public文件夹，首页图片的引用方式 二选一
 
@@ -73,7 +76,7 @@ heroImageDark: /images/logo.png
 
 
 
-### 首页按钮
+## 首页按钮
 
 用 `actions` 配置首页按钮，一般2个是比较舒适的，当然你也可以配置多个
 
@@ -129,7 +132,9 @@ actions:
 ![](./vuepress-30.png)
 
 
-### 特性列表
+
+
+## 特性列表
 
 用 `features` 配置首页特性列表
 
@@ -152,7 +157,11 @@ features:
 ![](./vuepress-31.png)
 
 
-### 页脚
+
+
+
+
+## 页脚
 
 
 用 `footer` 配置首页的页脚，一般就是版权和备案信息
@@ -168,7 +177,7 @@ footer: MIT Licensed | Copyright © 2018-present Evan You
 
 我们将页脚的html开启，然后书写备案信息
 
-```md{2}
+```md{2,4}
 ---
 footerHtml: true
 
@@ -181,84 +190,16 @@ footer: Copyright © 2023 备案号：<a href="https://beian.miit.gov.cn/" targe
 ![](./vuepress-32.png)
 
 
-### 内容
-
-官方文档在这里加入了一个代码块
-
-我们后面会细说，先直接复制了看效果吧!
-
-::: tip 说明
-你不想加，也可以像写markdown一样添加内容
-
-注意：markdown内容要放在`Frontmatter` 以外
-:::
-
-````md
-### 像数 1, 2, 3 一样容易
-
-:::: code-group
-::: code-group-item PNPM
-```bash
-# 在你的项目中安装
-pnpm add -D vuepress@next @vuepress/client@next vue
-
-# 新建一个 markdown 文件
-echo '# Hello VuePress' > README.md
-
-# 开始写作
-pnpm vuepress dev
-
-# 构建静态文件
-pnpm vuepress build
-```
-:::
-::: code-group-item YARN
-```bash
-# 在你的项目中安装
-yarn add -D vuepress@next
-
-# 新建一个 markdown 文件
-echo '# Hello VuePress' > README.md
-
-# 开始写作
-yarn vuepress dev
-
-# 构建静态文件
-yarn vuepress build
-```
-:::
-::: code-group-item NPM
-```bash
-# 在你的项目中安装
-npm install -D vuepress@next
-
-# 新建一个 markdown 文件
-echo '# Hello VuePress' > README.md
-
-# 开始写作
-npx vuepress dev
-
-# 构建静态文件
-npx vuepress build
-```
-:::
-::::
-````
-
-
-输出：
-
-![](./vuepress-33.png)
 
 
 
-### 上个页面
 
-上一个页面的链接，会自动根据侧边栏配置进行推断
+## 上个页面
 
-你也可以手动配配置
+上一个页面的链接，会自动根据侧边栏配置进行推断，不是自己想要的你也可以手动配置
 
-输入：
+
+格式：
 
 ```md
 ---
@@ -281,13 +222,17 @@ prev: ../../guide/getting-started.md
 ```
 
 
-### 下个页面
 
 
 
-下一个页面的链接，会自动根据侧边栏配置进行推断
 
-输入：
+
+## 下个页面
+
+
+下一个页面的链接，会自动根据侧边栏配置进行推断，不是自己想要的你也可以手动配置
+
+格式：
 
 ```md
 ---
@@ -312,7 +257,7 @@ next: ../../guide/getting-started.md
 
 
 
-### layout
+## layout
 
 页面的布局
 

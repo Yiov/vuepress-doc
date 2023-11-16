@@ -1,10 +1,6 @@
 # DocSearch
 
-::: warning 更新时间
-最近更新：2023-9-12
-
-搭建版本：v2.0-beta.67
-:::
+> 最近更新：2023-9-12
 
 
 ## 安装
@@ -17,20 +13,17 @@
 :::: code-group
 ::: code-group-item pnpm
 ```sh
-#这里是pnpm 新增@algolia/client-search
-pnpm add -D @vuepress/plugin-docsearch@next @algolia/client-search search-insights
+pnpm add -D @vuepress/plugin-docsearch@next
 ```
 :::
 ::: code-group-item yarn
 ```sh
-#这里是yarn 新增@algolia/client-search
-yarn add -D @vuepress/plugin-docsearch@next @algolia/client-search search-insights
+yarn add -D @vuepress/plugin-docsearch@next
 ```
 :::
 ::: code-group-item npm
 ```sh
-#这里是npm 新增@algolia/client-search
-npm i -D @vuepress/plugin-docsearch@next @algolia/client-search search-insights
+npm i -D @vuepress/plugin-docsearch@next
 ```
 :::
 ::::
@@ -43,7 +36,7 @@ npm i -D @vuepress/plugin-docsearch@next @algolia/client-search search-insights
 
 ## 配置
 
-然后在ts里添加配置
+然后在 `config.ts` 里添加配置
 
 ::: warning 注意
 appId / apiKey / indexName 这3个我们等会获取了再填入
@@ -87,22 +80,24 @@ export default {
 ![](./vuepress-48.png)
 
 
-## 使用
 
 为了获取 `appId` / `apiKey` / `indexName`
 
-在注册账号前，请先确定自己使用 [自行申请](#自行申请) 还是 [自行爬取](#自行爬取)
+在注册账号前，请先确定自己使用 [官方申请](#官方申请-选其一) 还是 [自建爬虫](#自建爬虫-选其一)
 
 
 
 ::: tip 区别
-自行申请：可使用algolia官方的爬虫，但是需要提交公开仓库代码链接并通过
+官方申请：可使用algolia官方的爬虫，但是需要提交公开仓库代码链接并通过
 
-自行爬取：需有一定动手能力，自行搭建爬虫，不需要提交仓库代码链接
+自建爬虫：需有一定动手能力，自行搭建爬虫，不需要提交仓库代码链接
 :::
 
 
-### 自行申请
+## 官方申请(选其一)
+
+
+### 递交申请
 
 DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com/)
 
@@ -119,6 +114,8 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 ![](./vuepress-51.png)
 
+
+### 注册账号
 
 等待6-7小时，邮件发送过来
 
@@ -145,6 +142,7 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 ![](./vuepress-54.png)
 
 
+### 爬取数据
 
 问题来了，这里的索引 `records` 值为0，没有数据，爬取数据有问题
 
@@ -209,6 +207,8 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 
 
+### 测试结果
+
 本地搜索一下，可以使用了
 
 ::: tip 说明
@@ -223,10 +223,12 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 
 
-### 自行爬取
+## 自建爬虫(选其一)
 
 有点耐心看，我都一步步截图了
 
+
+### 注册账号
 
 [Algolia官网](https://www.algolia.com/) 注册并登录账号
 
@@ -238,6 +240,7 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 ![](./vuepress-67.png)
 
 
+### 创建应用
 
 注册好后，我们在设置里新建一个Application应用
 
@@ -280,6 +283,7 @@ DocSearch官网：[https://docsearch.algolia.com/](https://docsearch.algolia.com
 
 
 
+### 创建索引
 
 右下角创建索引，选择 Date Sources - Indices - Create Index
 
@@ -315,17 +319,15 @@ indexName：索引名
 
 ## 爬取数据
 
-此方式仅演示 [自行爬取](#自行爬取) 后的方式，二选一
+此方式仅适用于 [自建爬虫](#自建爬虫-选其一) ，不适用与 [官方申请](官方申请-选其一)
 
-::: tip 说明
-我就是被这个整崩溃了，爬取的索引就是用不了，累计耗时半个月，才搞清里面的逻辑
-:::
+[Docker](#docker) 和 [Github Actions](#github-actions) 二选一，推荐使用 `Github Actions`
 
 
 ### Docker
 
 ::: warning 选其一
-这个和 [Github Actions爬取数据](#github-actions爬取数据) 任选其一
+这个和 [Github Actions](#github-actions) 任选其一
 :::
 
 我用了 [虚拟机](https://yiov.top/website/VMware) 安装了 [docker](https://yiov.top/website/docker)，进 [宝塔](https://yiov.top/website/BT) 根目录 `root`文件夹
@@ -469,7 +471,7 @@ docker run -it --env-file=/root/docsearch/.env -e "CONFIG=$(cat /root/docsearch/
 
 
 ::: warning 推荐
-这个和 [Docker爬取数据](#docker爬取数据) 任选其一，推荐此方式
+这个和 [Docker爬取数据](#docker) 任选其一
 :::
 
 
@@ -642,6 +644,10 @@ API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
 
 ![](./vuepress-97.png)
 
+
+
+### 测试结果
+
 我们提交一次代码，等工作流跑完，我们试试搜索结果
 
 ![](./vuepress-98.png)
@@ -655,6 +661,9 @@ API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
 这是官网原文档的索引，有明显的分类，很美观
 
 ![](./vuepress-99.png)
+
+
+### 格式
 
 经过对 [Algolia官方文档](https://docsearch.algolia.com/docs/legacy/config-file/) 进行查阅，找到了方法
 

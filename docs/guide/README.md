@@ -1,21 +1,21 @@
+---
+next:
+  text: 快速上手
+  link: /guide/getting-started
+---
 
 # 前言
 
-::: warning 更新时间
-最近更新：2023-7-15
+> 最近更新：2023-11-15
 
-搭建版本：v2.0-beta.66
-:::
 
 
 ## 简介
 
-VuePress 是一个以 Markdown 为中心的静态网站生成器。你可以使用 Markdown 来书写内容（如文档、博客等），然后 VuePress 会帮助你生成一个静态网站来展示它们
+VuePress 是一个以 [Markdown](https://zh.wikipedia.org/wiki/Markdown) 为中心的静态网站生成器。你可以使用 Markdown 来书写内容（如文档、博客等），然后 VuePress 会帮助你生成一个静态网站来展示它们
 
 
-## Markdown
-
-如果你还不了解 `Markdown` ，[请看我整理的Markdown教程](https://yiov.top/daily/markdown/)
+如果你还不了解 Markdown ，[请看我整理的Markdown教程](https://yiov.top/daily/markdown/)
 
 
 
@@ -38,7 +38,7 @@ VuePress 是一个以 Markdown 为中心的静态网站生成器。你可以使�
 ## 其他主题
 
 ::: tip 说明
-你要是喜欢VitePress这类的，可以使用 [@vuepress-theme-plume](https://pengzhanbo.cn/note/vuepress-theme-plume/) 主题
+你要是喜欢 [VitePress](https://vitepress.dev/) 这类的，可以使用 [@vuepress-theme-plume](https://pengzhanbo.cn/note/vuepress-theme-plume/) 主题
 :::
 
 * [npmjs社区主题](https://www.npmjs.com/search?q=keywords:vuepress-theme)

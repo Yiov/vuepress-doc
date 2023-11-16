@@ -1,10 +1,13 @@
-# Markdown
+---
+# NavLink
+prev:
+  text: Fromtmatter
+  link: /guide/fromtmatter
+---
+  # Markdown
 
-::: warning 更新时间
-最近更新：2023-7-15
+> 最近更新：2023-7-15
 
-搭建版本：v2.0-beta.66
-:::
 
 如果你还不了解 Markdown ，[请看我整理的Markdown教程](https://yiov.top/daily/markdown/)
 
@@ -37,7 +40,7 @@ export default {
 对于指向内部 Markdown 文件的链接，尽可能使用相对路径，而不是绝对路径
 :::
 
-```
+```md{4}
 ├─ docs
 │  ├─ .vuepress
 │  ├─ guide
@@ -147,10 +150,10 @@ markdown: {
 ![图片描述](./image.png)
 ```
 
-比如我引用guide目录里的hero图片
+比如我引用 `guide/hero.png` 里的hero图片
 
-::: tip 说明
-因为hero.png和markdown.md文件都在guide目录里，直接用相对路径即可
+::: warning 注意
+hero.png和markdown.md文件必须都在guide目录里
 :::
 
 输入：
@@ -178,15 +181,50 @@ markdown: {
 
 
 
+
 ### Public文件
 
 静态资源放在 Public 目录中，它们会被复制到最终生成的网站的根目录下
 
-::: warning 注意
-如无必要，无需更改配置，不填入即可！
+由于Public的特殊性，可以用相对路径路径直接引用文件
 
-实在你想改变目录，在config.ts添加如下配置
+比如：在 `vuepress/public/images/hero.png` 的使用方法
+
+```md
+![](/images/hero.png)
+```
+
+输出：
+
+![](/images/hero.png)
+
+
+
+
+如果你想改变目录，需要使用 [别名路径](#别名路径) 且在config.ts添加如下配置
+
+::: warning 注意
+若无必要，不要乱改！！！
+:::
+
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm add -D @vuepress/utils@next
+```
+:::
+::: code-group-item yarn
+```sh
+yarn add -D @vuepress/utils@next
+```
+:::
+::: code-group-item npm
+```sh
+npm i -D @vuepress/utils@next
+```
+:::
 ::::
+
 
 ```ts{1,4}
 import { getDirname, path } from '@vuepress/utils'
@@ -229,7 +267,7 @@ export default {
 ```
 
 
-### 路径别名
+### 别名路径
 
 在配置文件中设置的路径别名也同样支持更改
 
@@ -425,9 +463,30 @@ markdown: {
 <!-- 第 3-10 行高亮 ts语言，其中显示的第3行高亮，不显示行号 -->
 @[code{3-10} ts{3}:no-line-numbers](./.vuepress/config.ts)
 ```
+::: warning 注意
+若无必要，不要乱改！！！
+:::
 
+针对上面这种无法引用的路径，我们可以通过配置 `config.ts` 来处理 [别名路径](#别名路径)
 
-针对上面这种无法引用的路径，我们可以通过配置 `config.ts` 来处理路径别名
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm add -D @vuepress/utils@next
+```
+:::
+::: code-group-item yarn
+```sh
+yarn add -D @vuepress/utils@next
+```
+:::
+::: code-group-item npm
+```sh
+npm i -D @vuepress/utils@next
+```
+:::
+::::
+
 
 ```ts{1,3,7-11}
 import { getDirname, path } from '@vuepress/utils'
@@ -459,21 +518,18 @@ export default {
 
 
 
+
+
 ### 分组代码
 
 也叫代码块嵌套，这里使用到里主题集成的自定义容器
 
-使用 `code-group` 包裹
+使用 `code-group` 包裹，使用`code-group-item` 列出
 ```md
 :::: code-group
-这里是分组内容
-::::
-```
-
-使用`code-group-item` 列出
-```md
 ::: code-group-item 这里是分组标题
 :::
+::::
 ```
 
 输入：

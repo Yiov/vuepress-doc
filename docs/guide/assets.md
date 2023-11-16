@@ -1,10 +1,6 @@
 # 静态部署
 
-::: warning 更新时间
-最近更新：2023-7-15
-
-搭建版本：v2.0-beta.66
-:::
+> 最近更新：2023-7-15
 
 主要讲一下GitHub，其他的方式都大同小异，[更多部署方式可以参考官方文档](https://v2.vuepress.vuejs.org/zh/guide/deployment.html)
 
@@ -50,11 +46,13 @@ export default {
 
 
 
-## 配置工作流
+## 工作流(可选)
+
+配置工作流可以自动帮我们部署发布，[懒得弄看下面的教程：网站部署](#网站部署)
 
 新建文件 `.github/workflows/docs.yml` ，将下面yml信息粘贴进去
 
-```
+```md{4}
 ├─ docs
 ├─ .github
 │    └─ workflows
@@ -137,7 +135,9 @@ jobs:
 
 ## 网站部署
 
-如果不想要自动化部署到网站，可以通过命令打包
+我自己使用的是 [Vercel一键部署](https://yiov.top/website/vercel/) 还不用买服务器，买个域名就就行
+
+如果想要部署到 [GithubPage](https://yiov.top/website/githubpage/) 或者 [服务器](https://yiov.top/website/ECS/) 的话，可以通过命令打包
 
 ::: tip 说明
 默认的构建输出目录 `.vuepress/dist`
@@ -163,10 +163,10 @@ npm docs:build
 ::::
 
 
-打包完成后，在 `docs/.vuepress/dist` 目录，将`dist`上传到网站或者仓库即可
-
+打包完成后，在 `docs/.vuepress/dist` 目录，将`dist` 文件夹的所有文件上传到网站或者仓库即可
 
 ![](./vuepress-39.png)
+
 
 手动上传到github的，需要在设置-page里把分支改成main，默认root，保存等创建成功后即可获得访问链接
 
