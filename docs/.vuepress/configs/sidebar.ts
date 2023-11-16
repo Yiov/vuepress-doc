@@ -28,6 +28,7 @@ export const sidebarA: SidebarConfig = [
       '/guide/docsearch', 
       '/guide/plugin', 
       '/guide/components', 
+      '/guide/update', 
     ],
   },
   {

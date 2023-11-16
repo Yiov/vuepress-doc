@@ -77,6 +77,7 @@ export default {
                 '/guide/docsearch', 
                 '/guide/plugin', 
                 '/guide/components', 
+                '/guide/update', 
               ]
             },
             {
