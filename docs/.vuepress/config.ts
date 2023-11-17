@@ -124,9 +124,13 @@ export default {
     plugins: [
       //docsearch配置
       docsearchPlugin({
-        appId: 'F6RYJMVN8K',
-        apiKey: 'a27586ba3f214fba3e7782735988691e',
-        indexName: 'vuepressyiov',
+        // appId: 'F6RYJMVN8K',
+        // apiKey: 'a27586ba3f214fba3e7782735988691e',
+        // indexName: 'vuepressyiov',
+
+        appId: "NR5QNPJN44",
+        apiKey: "1f28f6ca8aad82e405dc4741a517e9d9",
+        indexName: "yiov",
         
         locales: {
           '/': {

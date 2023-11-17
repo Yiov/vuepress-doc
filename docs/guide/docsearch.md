@@ -317,11 +317,13 @@ indexName：索引名
 
 
 
-## 爬取数据
+### 爬取数据
 
 此方式仅适用于 [自建爬虫](#自建爬虫-选其一) ，不适用于 [官方申请](官方申请-选其一)
 
 [Docker](#docker) 和 [Github Actions](#github-actions) 二选一，推荐使用 `Github Actions`
+
+
 
 
 ### Docker
@@ -656,6 +658,69 @@ API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
 
 
 
+
+
+
+## 样式美化
+
+你可以通过 [@docsearch/css](https://docsearch.algolia.com/docs/styling/) 提供的 CSS 变量来自定义样式
+
+如果你不懂方法，[可以参照样式美化的方法](./beautification)
+
+```css
+:root {
+  --docsearch-primary-color: rgb(84, 104, 255);
+  --docsearch-text-color: rgb(28, 30, 33);
+  --docsearch-spacing: 12px;
+  --docsearch-icon-stroke-width: 1.4;
+  --docsearch-highlight-color: var(--docsearch-primary-color);
+  --docsearch-muted-color: rgb(150, 159, 175);
+  --docsearch-container-background: rgba(101, 108, 133, 0.8);
+  --docsearch-logo-color: rgba(84, 104, 255);
+
+  /* modal */
+  --docsearch-modal-width: 560px;
+  --docsearch-modal-height: 600px;
+  --docsearch-modal-background: rgb(245, 246, 247);
+  --docsearch-modal-shadow: inset 1px 1px 0 0 rgba(255, 255, 255, 0.5), 0 3px
+      8px 0 rgba(85, 90, 100, 1);
+
+  /* searchbox */
+  --docsearch-searchbox-height: 56px;
+  --docsearch-searchbox-background: rgb(235, 237, 240);
+  --docsearch-searchbox-focus-background: #fff;
+  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--docsearch-primary-color);
+
+  /* hit */
+  --docsearch-hit-height: 56px;
+  --docsearch-hit-color: rgb(68, 73, 80);
+  --docsearch-hit-active-color: #fff;
+  --docsearch-hit-background: #fff;
+  --docsearch-hit-shadow: 0 1px 3px 0 rgb(212, 217, 225);
+
+  /* key */
+  --docsearch-key-gradient: linear-gradient(
+    -225deg,
+    rgb(213, 219, 228) 0%,
+    rgb(248, 248, 248) 100%
+  );
+  --docsearch-key-shadow: inset 0 -2px 0 0 rgb(205, 205, 230), inset 0 0 1px 1px
+      #fff, 0 1px 2px 1px rgba(30, 35, 90, 0.4);
+
+  /* footer */
+  --docsearch-footer-height: 44px;
+  --docsearch-footer-background: #fff;
+  --docsearch-footer-shadow: 0 -1px 0 0 rgb(224, 227, 232), 0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+}
+```
+
+
+
+
+
+
+
+
 ## 索引美化
 
 这是官网原文档的索引，有明显的分类，很美观
@@ -663,27 +728,621 @@ API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
 ![](./vuepress-99.png)
 
 
-### 格式
+
+### 官方爬虫优化
+
+经过对 [Algolia官方文档](https://docsearch.algolia.com/docs/templates) 进行查阅，找到了方法
+
+::: warning 注意
+为了更直观的讲解，我贴出自己的部分索引规则
+
+---
+
+修改前请先备份，以免无法找回使用
+:::
+
+```js{6-8,15,17-18,26,34,43,51,59,70}
+new Crawler({
+  rateLimit: 8,
+  maxDepth: 10,
+  maxUrls: 5000,
+  startUrls: [
+    "https://yiov.github.io/",
+    "https://yiov.github.io/guide/",
+    "https://yiov.github.io/guide/getting-started.html"
+  ],
+  renderJavaScript: false,
+  sitemaps: ["https://yiov.github.io/sitemap.xml"],
+  ignoreCanonicalTo: true,
+  discoveryPatterns: ["https://yiov.github.io/**"],
+  schedule: "at 14:52 on Tuesday",
+  actions: [
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "指南",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["guide"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/getting-started.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "快速上手",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["getting-started"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+  ],
+  safetyChecks: { beforeIndexPublishing: { maxLostRecordsPercentage: 30 } },
+  initialIndexSettings: {
+    vuepressyiov: {
+      attributesForFaceting: ["type", "lang", "language", "version", "tags"],
+      attributesToRetrieve: [
+        "hierarchy",
+        "content",
+        "anchor",
+        "url",
+        "url_without_anchor",
+        "type",
+      ],
+      attributesToHighlight: ["hierarchy", "hierarchy_camel", "content"],
+      attributesToSnippet: ["content:10"],
+      camelCaseAttributes: ["hierarchy", "hierarchy_radio", "content"],
+      searchableAttributes: [
+        "unordered(hierarchy_radio_camel.lvl0)",
+        "unordered(hierarchy_radio.lvl0)",
+        "unordered(hierarchy_radio_camel.lvl1)",
+        "unordered(hierarchy_radio.lvl1)",
+        "unordered(hierarchy_radio_camel.lvl2)",
+        "unordered(hierarchy_radio.lvl2)",
+        "unordered(hierarchy_radio_camel.lvl3)",
+        "unordered(hierarchy_radio.lvl3)",
+        "unordered(hierarchy_radio_camel.lvl4)",
+        "unordered(hierarchy_radio.lvl4)",
+        "unordered(hierarchy_radio_camel.lvl5)",
+        "unordered(hierarchy_radio.lvl5)",
+        "unordered(hierarchy_radio_camel.lvl6)",
+        "unordered(hierarchy_radio.lvl6)",
+        "unordered(hierarchy_camel.lvl0)",
+        "unordered(hierarchy.lvl0)",
+        "unordered(hierarchy_camel.lvl1)",
+        "unordered(hierarchy.lvl1)",
+        "unordered(hierarchy_camel.lvl2)",
+        "unordered(hierarchy.lvl2)",
+        "unordered(hierarchy_camel.lvl3)",
+        "unordered(hierarchy.lvl3)",
+        "unordered(hierarchy_camel.lvl4)",
+        "unordered(hierarchy.lvl4)",
+        "unordered(hierarchy_camel.lvl5)",
+        "unordered(hierarchy.lvl5)",
+        "unordered(hierarchy_camel.lvl6)",
+        "unordered(hierarchy.lvl6)",
+        "content",
+      ],
+      distinct: true,
+      attributeForDistinct: "url",
+      customRanking: [
+        "desc(weight.pageRank)",
+        "desc(weight.level)",
+        "asc(weight.position)",
+      ],
+      ranking: [
+        "words",
+        "filters",
+        "typo",
+        "attribute",
+        "proximity",
+        "exact",
+        "custom",
+      ],
+      highlightPreTag: '<span class="algolia-docsearch-suggestion--highlight">',
+      highlightPostTag: "</span>",
+      minWordSizefor1Typo: 3,
+      minWordSizefor2Typos: 7,
+      allowTyposOnNumericTokens: false,
+      minProximity: 1,
+      ignorePlurals: true,
+      advancedSyntax: true,
+      attributeCriteriaComputedByMinProximity: true,
+      removeWordsIfNoResults: "allOptional",
+    },
+  },
+  appId: "F6RYJMVN8K",
+  apiKey: "自动填入的勿改",
+});
+```
+
+::: tip 讲解
+startUrls：除了主域名，还可以加入其它页面的链接，方便后面进行分类
+
+actions：是我们分类的关键参数
+
+indexName：索引名
+
+pathsToMatch：参数匹配，分别填我们的分页链接
+
+defaultValue：分页标签名
+
+tags：分页标签
+
+attributesForFaceting：页面属性，`lang`和`tags`至关重要，不填即便爬了数据也搜不到
+
+其它参数均默认即可
+:::
+
+
+
+
+
+::: details 点击查看 我的完整索引配置
+```js
+new Crawler({
+  rateLimit: 8,
+  maxDepth: 10,
+  maxUrls: 5000,
+  startUrls: [
+    "https://yiov.github.io/",
+    "https://yiov.github.io/guide/",
+    "https://yiov.github.io/guide/getting-started.html",
+    "https://yiov.github.io/guide/configuration.html",
+    "https://yiov.github.io/guide/page.html",
+    "https://yiov.github.io/guide/frontmatter.html",
+    "https://yiov.github.io/guide/markdown.html",
+    "https://yiov.github.io/guide/assets.html",
+    "https://yiov.github.io/guide/beautification.html",
+    "https://yiov.github.io/guide/docsearch.html",
+    "https://yiov.github.io/guide/plugin.html",
+    "https://yiov.github.io/guide/components.html",
+    "https://yiov.github.io/guide/update.html"
+  ],
+  renderJavaScript: false,
+  sitemaps: ["https://yiov.github.io/sitemap.xml"],
+  ignoreCanonicalTo: true,
+  discoveryPatterns: ["https://yiov.github.io/**"],
+  schedule: "at 14:52 on Tuesday",
+  actions: [
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "指南",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["guide"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/getting-started.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "快速上手",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["getting-started"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/configuration.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "配置",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["configuration"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/page.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "页面",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["page"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/frontmatter.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "Frontmatter",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["frontmatter"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/markdown.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "Markdown",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["markdown"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/assets.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "静态部署",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["assets"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/beautification.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "样式美化",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["beautification"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/docsearch.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "Docsearch",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["docsearch"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/plugin.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "插件",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["plugin"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/components.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "组件",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["components"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+    {
+      indexName: "vuepressyiov",
+      pathsToMatch: ["https://yiov.github.io/guide/update.html"],
+      recordExtractor: ({ helpers }) => {
+        return helpers.docsearch({
+          recordProps: {
+            lvl1: ".theme-default-content h1",
+            content: ".theme-default-content p, .theme-default-content li",
+            lvl0: {
+              selectors: "p.sidebar-heading.open",
+              defaultValue: "更新及卸载",
+            },
+            lvl2: ".theme-default-content h2",
+            lvl3: ".theme-default-content h3",
+            lvl4: ".theme-default-content h4",
+            lvl5: ".theme-default-content h5",
+            lang: "",
+            tags: {
+              defaultValue: ["update"],
+            },
+          },
+          aggregateContent: true,
+        });
+      },
+    },
+  ],
+  safetyChecks: { beforeIndexPublishing: { maxLostRecordsPercentage: 30 } },
+  initialIndexSettings: {
+    vuepressyiov: {
+      attributesForFaceting: ["type", "lang", "language", "version", "tags"],
+      attributesToRetrieve: [
+        "hierarchy",
+        "content",
+        "anchor",
+        "url",
+        "url_without_anchor",
+        "type",
+      ],
+      attributesToHighlight: ["hierarchy", "hierarchy_camel", "content"],
+      attributesToSnippet: ["content:10"],
+      camelCaseAttributes: ["hierarchy", "hierarchy_radio", "content"],
+      searchableAttributes: [
+        "unordered(hierarchy_radio_camel.lvl0)",
+        "unordered(hierarchy_radio.lvl0)",
+        "unordered(hierarchy_radio_camel.lvl1)",
+        "unordered(hierarchy_radio.lvl1)",
+        "unordered(hierarchy_radio_camel.lvl2)",
+        "unordered(hierarchy_radio.lvl2)",
+        "unordered(hierarchy_radio_camel.lvl3)",
+        "unordered(hierarchy_radio.lvl3)",
+        "unordered(hierarchy_radio_camel.lvl4)",
+        "unordered(hierarchy_radio.lvl4)",
+        "unordered(hierarchy_radio_camel.lvl5)",
+        "unordered(hierarchy_radio.lvl5)",
+        "unordered(hierarchy_radio_camel.lvl6)",
+        "unordered(hierarchy_radio.lvl6)",
+        "unordered(hierarchy_camel.lvl0)",
+        "unordered(hierarchy.lvl0)",
+        "unordered(hierarchy_camel.lvl1)",
+        "unordered(hierarchy.lvl1)",
+        "unordered(hierarchy_camel.lvl2)",
+        "unordered(hierarchy.lvl2)",
+        "unordered(hierarchy_camel.lvl3)",
+        "unordered(hierarchy.lvl3)",
+        "unordered(hierarchy_camel.lvl4)",
+        "unordered(hierarchy.lvl4)",
+        "unordered(hierarchy_camel.lvl5)",
+        "unordered(hierarchy.lvl5)",
+        "unordered(hierarchy_camel.lvl6)",
+        "unordered(hierarchy.lvl6)",
+        "content",
+      ],
+      distinct: true,
+      attributeForDistinct: "url",
+      customRanking: [
+        "desc(weight.pageRank)",
+        "desc(weight.level)",
+        "asc(weight.position)",
+      ],
+      ranking: [
+        "words",
+        "filters",
+        "typo",
+        "attribute",
+        "proximity",
+        "exact",
+        "custom",
+      ],
+      highlightPreTag: '<span class="algolia-docsearch-suggestion--highlight">',
+      highlightPostTag: "</span>",
+      minWordSizefor1Typo: 3,
+      minWordSizefor2Typos: 7,
+      allowTyposOnNumericTokens: false,
+      minProximity: 1,
+      ignorePlurals: true,
+      advancedSyntax: true,
+      attributeCriteriaComputedByMinProximity: true,
+      removeWordsIfNoResults: "allOptional",
+    },
+  },
+  appId: "F6RYJMVN8K",
+  apiKey: "eca1301dfef30f54242731fdca1f7aed",
+});
+```
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+### 自建爬虫优化
 
 经过对 [Algolia官方文档](https://docsearch.algolia.com/docs/legacy/config-file/) 进行查阅，找到了方法
 
 
-::: danger 注意
-为了更直观的查看，我贴出自己的索引规则讲解
+::: warning 注意
+为了更直观的讲解，我贴出自己的部分索引规则
 
 ---
 
-`selectors_key` 和 `tags` 配合使用，可以为我们的搜索结果分类
-
-然后在 `selectors` 一一对应，`selector` 留空，`default_value` 为我们的分类标签命名
-
-`default` 是系统默认搜索结果，必须存在！！！
-
-另 `attributesForFaceting` 最后的必须包含 `tags` 和 `lang`
+修改前请先备份，以免无法找回使用
 :::
 
 
-```json{2,5-7,18,21,36,39,57,75-76}
+```json{2,5-7,18,21,39,57,75-76}
 {
     "index_name": "yiov",
     "start_urls": [
@@ -765,66 +1424,28 @@ API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
 }
 ```
 
-### index_name
+::: tip 说明
+index_name：索引名
 
-索引名
+start_urls：爬取链接，可以通过 `selectors_key` 和 `tags` 进行分类
 
-### start_urls
+selectors_key：分页的关键词
 
-爬取链接，可以通过 `selectors_key` 和 `tags` 进行分类
+tags：分页标签
 
-格式：
+page_rank：分页搜索排序，数字1最大
 
-```json
-"start_urls": [
-  {
-    "url": "https://你的链接.com",
-    "selectors_key": "", //关键词
-    "tags": [""], //打标签
-    "page_rank": 1 //当前索引搜索排序
-    },
-]
-```
+stop_urls：禁止爬取的链接
 
-### stop_urls
+default：默认分类，必须有，否则无法爬取
 
-禁止爬取的链接
+default_value：分类后默认显示的值
 
-格式：
-
-```json
-"stop_urls": ["https://www.example.com/docs/index.html", "license.html"]
-```
+attributesForFaceting：分页属性，必须包含 `tags` 和 `lang`，否则即使爬取了数据也无法搜索
+:::
 
 
-### default_value
-
-分类后默认显示的值
-
-
-
-### 显示效果
-
-
-我们修改好后重新爬取，也可以用官方的 [docsearchjs-v3-playground](https://codesandbox.io/s/docsearchjs-v3-playground-z9oxj?file=/src/index.js) 查看效果
-
-
-我贴自己的参数，可以供你们参考
-
-
-```ts{2-4}
-docsearchPlugin({
-  appId: "NR5QNPJN44",
-  apiKey: "1f28f6ca8aad82e405dc4741a517e9d9",
-  indexName: "yiov",
-}),
-```
-
-![](./vuepress-103.png)
-
-
-
-::: details 点我查看 我的完整的配置
+::: details 点击查看 我的完整的索引配置
 ```json
 {
     "index_name": "yiov",
@@ -1098,56 +1719,31 @@ docsearchPlugin({
 
 
 
+### 显示效果
 
-## 样式美化
 
-你可以通过 [@docsearch/css](https://docsearch.algolia.com/docs/styling/) 提供的 CSS 变量来自定义样式
+我们修改好后重新爬取，也可以用官方的 [docsearchjs-v3-playground](https://codesandbox.io/s/docsearchjs-v3-playground-z9oxj?file=/src/index.js) 查看效果
 
-如果你不懂方法，[可以参照样式美化的方法](./beautification)
 
-```css
-:root {
-  --docsearch-primary-color: rgb(84, 104, 255);
-  --docsearch-text-color: rgb(28, 30, 33);
-  --docsearch-spacing: 12px;
-  --docsearch-icon-stroke-width: 1.4;
-  --docsearch-highlight-color: var(--docsearch-primary-color);
-  --docsearch-muted-color: rgb(150, 159, 175);
-  --docsearch-container-background: rgba(101, 108, 133, 0.8);
-  --docsearch-logo-color: rgba(84, 104, 255);
+我贴自己的参数，可以供你们参考
 
-  /* modal */
-  --docsearch-modal-width: 560px;
-  --docsearch-modal-height: 600px;
-  --docsearch-modal-background: rgb(245, 246, 247);
-  --docsearch-modal-shadow: inset 1px 1px 0 0 rgba(255, 255, 255, 0.5), 0 3px
-      8px 0 rgba(85, 90, 100, 1);
 
-  /* searchbox */
-  --docsearch-searchbox-height: 56px;
-  --docsearch-searchbox-background: rgb(235, 237, 240);
-  --docsearch-searchbox-focus-background: #fff;
-  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--docsearch-primary-color);
-
-  /* hit */
-  --docsearch-hit-height: 56px;
-  --docsearch-hit-color: rgb(68, 73, 80);
-  --docsearch-hit-active-color: #fff;
-  --docsearch-hit-background: #fff;
-  --docsearch-hit-shadow: 0 1px 3px 0 rgb(212, 217, 225);
-
-  /* key */
-  --docsearch-key-gradient: linear-gradient(
-    -225deg,
-    rgb(213, 219, 228) 0%,
-    rgb(248, 248, 248) 100%
-  );
-  --docsearch-key-shadow: inset 0 -2px 0 0 rgb(205, 205, 230), inset 0 0 1px 1px
-      #fff, 0 1px 2px 1px rgba(30, 35, 90, 0.4);
-
-  /* footer */
-  --docsearch-footer-height: 44px;
-  --docsearch-footer-background: #fff;
-  --docsearch-footer-shadow: 0 -1px 0 0 rgb(224, 227, 232), 0 -3px 6px 0 rgba(69, 98, 155, 0.12);
-}
+```ts{2-4}
+docsearchPlugin({
+  appId: "NR5QNPJN44",
+  apiKey: "1f28f6ca8aad82e405dc4741a517e9d9",
+  indexName: "yiov",
+}),
 ```
+
+![](./vuepress-103.png)
+
+
+
+
+
+
+
+
+
+
