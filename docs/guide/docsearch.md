@@ -767,7 +767,7 @@ new Crawler({
             content: ".theme-default-content p, .theme-default-content li",
             lvl0: {
               selectors: "p.sidebar-heading.open",
-              defaultValue: "指南",
+              defaultValue: "前言",
             },
             lvl2: ".theme-default-content h2",
             lvl3: ".theme-default-content h3",
@@ -946,7 +946,7 @@ new Crawler({
             content: ".theme-default-content p, .theme-default-content li",
             lvl0: {
               selectors: "p.sidebar-heading.open",
-              defaultValue: "指南",
+              defaultValue: "前言",
             },
             lvl2: ".theme-default-content h2",
             lvl3: ".theme-default-content h3",
@@ -1399,7 +1399,7 @@ new Crawler({
         "default": {
             "lvl0": {
                 "selector": "",
-                "default_value": "我的文档"
+                "default_value": "前言"
             },
             "lvl1": ".theme-default-content h1",
             "lvl2": ".theme-default-content h2",
@@ -1686,7 +1686,7 @@ attributesForFaceting：分页属性，必须包含 `tags` 和 `lang`，否则�
         "default": {
             "lvl0": {
                 "selector": "",
-                "default_value": "我的文档"
+                "default_value": "前言"
             },
             "lvl1": ".theme-default-content h1",
             "lvl2": ".theme-default-content h2",
