@@ -1,6 +1,6 @@
 # 静态部署
 
-> 最近更新：2023-7-15
+> 最近更新：2023-11-17
 
 主要讲一下GitHub，其他的方式都大同小异，[更多部署方式可以参考官方文档](https://v2.vuepress.vuejs.org/zh/guide/deployment.html)
 
