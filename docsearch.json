@@ -1,0 +1,264 @@
+{
+    "index_name": "yiov",
+    "start_urls": [
+        {
+            "url": "https://vuepress.yiov.top/guide/getting-started.html",
+            "selectors_key": "getting-started",
+            "tags": ["getting-started"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/configuration.html",
+            "selectors_key": "configuration",
+            "tags": ["configuration"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/page.html",
+            "selectors_key": "page",
+            "tags": ["page"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/frontmatter.html",
+            "selectors_key": "frontmatter",
+            "tags": ["frontmatter"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/markdown.html",
+            "selectors_key": "markdown",
+            "tags": ["markdown"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/assets.html",
+            "selectors_key": "assets",
+            "tags": ["assets"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/beautification.html",
+            "selectors_key": "beautification",
+            "tags": ["beautification"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/docsearch.html",
+            "selectors_key": "docsearch",
+            "tags": ["docsearch"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/plugin.html",
+            "selectors_key": "plugin",
+            "tags": ["plugin"]
+        },
+        {
+            "url": "https://vuepress.yiov.top/guide/components.html",
+            "selectors_key": "components",
+            "tags": ["components"]
+        },
+        "https://vuepress.yiov.top/"
+    ],
+    "selectors": {
+        "getting-started": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "快速上手"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "configuration": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "配置"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "page": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "页面"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "frontmatter": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "Frontmatter"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "markdown": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "Markdown"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "assets": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "静态部署"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "beautification": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "样式美化"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "docsearch": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "Docsearch"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "plugin": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "插件"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "components": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "组件"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        },
+        "default": {
+            "lvl0": {
+                "selector": "",
+                "default_value": "前言"
+            },
+            "lvl1": ".theme-default-content h1",
+            "lvl2": ".theme-default-content h2",
+            "lvl3": ".theme-default-content h3",
+            "lvl4": ".theme-default-content h4",
+            "lvl5": ".theme-default-content h5",
+            "lvl6": ".theme-default-content h6",
+            "text": ".theme-default-content p, .theme-default-content li",
+            "lang": {
+                "selector": "/html/@lang",
+                "type": "xpath",
+                "global": true
+            }
+        }
+    },
+    "custom_settings": {
+      "attributesForFaceting": [
+        "lang",
+        "tags"
+      ]
+    }
+}
+
+
