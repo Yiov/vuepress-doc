@@ -478,102 +478,26 @@ docker run -it --env-file=/root/docsearch/.env -e "CONFIG=$(cat /root/docsearch/
 
 
 
-我们先创建一个工作流
-
-::: tip 说明
-我因为已经有一个了，我直接新建一个就行
-:::
+我们先在仓库 - 设置 - Secrets and variables - actions，新增仓库秘钥
 
 ![](./vuepress-88.png)
 
-![](./vuepress-89.png)
+分别添加 `APPLICATION_ID` 和 `API_KEY`
 
-命名为`docsearch.yml` ，复制粘贴下面的工作流代码，提交
+::: warning 千万不要填错了
+`APPLICATION_ID` 是 [algolia的 APPLICATION ID](https://www.algolia.com/)
+
+`API_KEY` 是 [algolia的 Admin API Key](https://www.algolia.com/)
+:::
+
+![](./vuepress-89.png)
 
 ![](./vuepress-90.png)
 
 
-:::: code-group
-::: code-group-item 发布后触发
-```yml
-on: deployment
-```
-:::
-::: code-group-item 提交后触发
-```yml
-on:
-  push:
-    branches:
-      - main
-```
-:::
-::: code-group-item 定时触发
-```yml
-on:
-  schedule:
-    # 约每天早上8点触发（UTC时间0点）
-    - cron: '0 0 * * *'
-```
-:::
-::: code-group-item 手动触发
-```yml
-on:
-  workflow_dispatch:
-```
-:::
-::::
-
-
-::: warning 注意
-这里触发的条件自己选，改代码高亮的位置就行，其他不要动
-:::
-
-
-```yml{4-8}
-# 名字可以自己取
-name: docsearch
-
-# 提交main分支触发部署
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  algolia:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      # 一会要建docsearch.json文件
-      - name: Get the content of docsearch.json as config
-        id: algolia_config
-        run: echo "::set-output name=config::$(cat docsearch.json | jq -r tostring)"
-
-      - name: Run algolia/docsearch-scraper image
-        # 环境变量 ，在仓库设置-安全里添加秘钥
-        # APPLICATION_ID 是 algoia 的 APPLICATION ID
-        # API_KEY 是 algolia 的 Admin API KEY
-        # CONFIG默认即可，无需更改
-        env:
-          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
-          API_KEY: ${{ secrets.API_KEY }}
-          CONFIG: ${{ steps.algolia_config.outputs.config }}
-        run: |
-          docker run \
-            --env APPLICATION_ID=${APPLICATION_ID} \
-            --env API_KEY=${API_KEY} \
-            --env "CONFIG=${CONFIG}" \
-            algolia/docsearch-scraper
-
-```
-
-![](./vuepress-91.png)
-
-
 然后在根目录新建一个 `docsearch.json` 文件，复制粘贴并提交
 
-![](./vuepress-92.png)
+![](./vuepress-91.png)
 
 
 ::: tip 说明
@@ -623,28 +547,106 @@ jobs:
 ```
 
 
+![](./vuepress-92.png)
+
 ![](./vuepress-93.png)
+
+
+最后，创建一个工作流
+
+::: tip 说明
+我因为已经有一个了，我直接新建一个就行
+:::
 
 ![](./vuepress-94.png)
 
-
-然后在仓库 - 设置 - Secrets and variables - actions，新增仓库秘钥
-
 ![](./vuepress-95.png)
 
-分别添加 `APPLICATION_ID` 和 `API_KEY`
-
-::: warning 注意
-APPLICATION_ID是 [algolia](https://www.algolia.com/) 的 `APPLICATION ID`
-
-API_KEY是 [algolia](https://www.algolia.com/) 的 `Admin API Key`
-
-千万不要填错了
-:::
+命名为`docsearch.yml` ，复制粘贴下面的工作流代码，提交
 
 ![](./vuepress-96.png)
 
+
+```yml{4-8}
+# 名字可以自己取
+name: docsearch
+
+# 提交main分支触发部署
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  algolia:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # 一会要建docsearch.json文件
+      - name: Get the content of docsearch.json as config
+        id: algolia_config
+        run: echo "::set-output name=config::$(cat docsearch.json | jq -r tostring)"
+
+      - name: Run algolia/docsearch-scraper image
+        # 环境变量 ，在仓库设置-安全里添加秘钥
+        # APPLICATION_ID 是 algoia 的 APPLICATION ID
+        # API_KEY 是 algolia 的 Admin API KEY
+        # CONFIG默认即可，无需更改
+        env:
+          APPLICATION_ID: ${{ secrets.APPLICATION_ID }}
+          API_KEY: ${{ secrets.API_KEY }}
+          CONFIG: ${{ steps.algolia_config.outputs.config }}
+        run: |
+          docker run \
+            --env APPLICATION_ID=${APPLICATION_ID} \
+            --env API_KEY=${API_KEY} \
+            --env "CONFIG=${CONFIG}" \
+            algolia/docsearch-scraper
+
+```
+
+::: warning 注意
+把注释都删掉
+
+触发的条件自己选，改代码高亮的位置就行，其他不要动
+:::
+
+:::: code-group
+::: code-group-item 发布后触发
+```yml
+on: deployment
+```
+:::
+::: code-group-item 提交后触发
+```yml
+on:
+  push:
+    branches:
+      - main
+```
+:::
+::: code-group-item 定时触发
+```yml
+on:
+  schedule:
+    # 约每天早上8点触发（UTC时间0点）
+    - cron: '0 0 * * *'
+```
+:::
+::: code-group-item 手动触发
+```yml
+on:
+  workflow_dispatch:
+```
+:::
+::::
+
+
 ![](./vuepress-97.png)
+
+
+
 
 
 
