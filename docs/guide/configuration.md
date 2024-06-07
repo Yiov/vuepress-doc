@@ -9,7 +9,7 @@
 
 我们安装了vscode，直接用它打开 `通过code打开`，新建`config.ts`文件
 
-> 鼠标右键没有，是因为你没有[安装vscode](https://yiov.top/daily/VSCode/)
+> 鼠标右键没有，是因为你没有[安装vscode](https://yiov.top/website/VSCode.html)
 
 ![](./vuepress-13.png)
 

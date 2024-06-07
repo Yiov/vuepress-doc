@@ -135,9 +135,9 @@ jobs:
 
 ## 网站部署
 
-我自己使用的是 [Vercel一键部署](https://yiov.top/website/vercel/) 还不用买服务器，买个域名就就行
+我自己使用的是 [Vercel一键部署](https://yiov.top/website/vercel.html) 还不用买服务器，买个域名就就行
 
-如果想要部署到 [GithubPage](https://yiov.top/website/githubpage/) 或者 [服务器](https://yiov.top/website/ECS/) 的话，可以通过命令打包
+如果想要部署到 [GithubPage](https://yiov.top/website/github.html#%E4%BD%BF%E7%94%A8) 或者 [服务器](https://yiov.top/website/Server.html) 的话，可以通过命令打包
 
 ::: tip 说明
 默认的构建输出目录 `.vuepress/dist`

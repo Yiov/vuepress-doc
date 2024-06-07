@@ -10,7 +10,11 @@ prev:
 
 
 
-那我们就来学习如何的搭建vuepress，就是你现在看到的这种文档网站
+::: danger 注意
+本人已转用 [Vitepress](https://vitepress.yiov.top/) ，可能不会再更新了
+
+rc版比beta版的bug还多，心力憔悴！
+:::
 
 
 ## 前期准备
@@ -21,13 +25,13 @@ prev:
 已经安装 或者 熟练了，可以不用看此步骤
 :::
 
-* 必装：[安装nodejs](https://yiov.top/website/nodejs#window%E5%AE%89%E8%A3%85)
+* 必装：[安装nodejs](https://yiov.top/website/nodejs.html)
 
 
-* 建议安装：[安装vscode](https://yiov.top/daily/VSCode/)
+* 建议安装：[安装vscode](https://yiov.top/website/VSCode.html)
 
 
-* 可选安装：[安装git](https://yiov.top/daily/git)
+* 可选安装：[安装git](https://yiov.top/website/git.html)
 
 
 

@@ -332,7 +332,7 @@ indexName：索引名
 这个和 [Github Actions](#github-actions) 任选其一
 :::
 
-我用了 [虚拟机](https://yiov.top/website/VMware) 安装了 [docker](https://yiov.top/website/docker)，进 [宝塔](https://yiov.top/website/BT) 根目录 `root`文件夹
+我用了 [虚拟机](https://yiov.top/website/VMware.html) 安装了 [docker](https://yiov.top/website/docker.html)，进 [宝塔](https://yiov.top/website/BT.html) 根目录 `root`文件夹
 
 新建一个 `docsearch` 目录
 

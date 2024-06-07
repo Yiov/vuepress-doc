@@ -8,6 +8,11 @@ next:
 
 > 最近更新：2023-11-17
 
+::: danger 注意
+本人已转用 [Vitepress](https://vitepress.yiov.top/) ，可能不会再更新了
+
+rc版比beta版的bug还多，心力憔悴！
+:::
 
 
 ## 简介
@@ -15,7 +20,7 @@ next:
 VuePress 是一个以 [Markdown](https://zh.wikipedia.org/wiki/Markdown) 为中心的静态网站生成器。你可以使用 Markdown 来书写内容（如文档、博客等），然后 VuePress 会帮助你生成一个静态网站来展示它们
 
 
-如果你还不了解 Markdown ，[请看我整理的Markdown教程](https://yiov.top/daily/markdown/)
+如果你还不了解 Markdown ，[请看我整理的Markdown教程](https://yiov.top/computer/markdown.html)
 
 
 

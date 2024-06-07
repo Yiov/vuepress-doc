@@ -33,7 +33,7 @@ export default {
       '/': {
         lang: 'zh-CN',
         title: 'VuePress',
-        description: '全程图文教程，轻松搭建文档',
+        description: '本人已转用VitePress，可能会无限期停更',
       },
       '/en/': {
         lang: 'en-US',
