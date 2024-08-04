@@ -1,34 +1,7 @@
 # 样式美化
 
-> 最近更新：2023-11-17
+> 最近更新：2024-7-29
 
-
-## Palette文件
-
-::: tip 说明
-若无必要，不建议修改
-
-修改方式请参照style，一样的
-:::
-
-```md{4}
-├─ docs
-│  ├─ .vuepress
-│  │  └─ styles
-│  │      └─ palette.scss   <--- 样式变量
-└─ README.md
-```
-
-你可以利用它来覆盖默认主题的预定义 SASS 变量
-
-::: details 点击查看预定义CSS变量
-```scss
-// responsive breakpoints
-$MQNarrow: 959px !default;
-$MQMobile: 719px !default;
-$MQMobileNarrow: 419px !default;
-```
-:::
 
 
 ## Style文件
@@ -293,46 +266,26 @@ html.dark .DocSearch {
 :::
 
 
-按照自己的需求对颜色进行更改，保存后如果没有发生变化，就在配置里引用一下
 
-已经变了，就不用这段代码
+比如我就修改，浅色模式下的按钮颜色
 
-```ts{6-7}
-export default {
-  //========logo路径========//
-  head: [['link', 
-  //favicon图标
-  { rel: 'icon', href: '/images/logo.png' },
-  // 自定义css样式
-  // { rel: 'stylesheet', href: '/styles/index.scss' },
-]],
-}
-```
-
-
-另一种是直接在页面引用style代码，比如：在 <Badge type="warning" text="首页README.md文件" vertical="middle" /> 里添加
-
-::: tip 说明
-style代码里不要含有//等注释符号
-:::
+::: details 其他页面修改参考路径
 
 ```md
-<style>
+原始路径：node_modules\@vuepress\theme-default\lib\client\styles
+```
+:::
+
+```scss title=".vuepress/styles/vars.scss"
 :root {
     --c-brand: #046abd;
     --c-brand-light: #046abd;
 }
-</style>
 ```
 
-![](./vuepress-36.png)
+![](/beautification/01.png)
 
 
-其他页面也是可以更改的，可以参照官方进行更改
-
-```路径
-原始路径：node_modules\@vuepress\theme-default\lib\client\styles
-```
 
 
 ## 代码精简
@@ -355,39 +308,41 @@ style代码里不要含有//等注释符号
 
 在 `index.ts` 文件中写
 
-```ts
+```ts title=".vuepress/configs/index.ts"
 export * from './sidebar'
 ```
 
 在 `sidebar.ts` 文件中写
 
-```ts
-import type { SidebarConfig } from '@vuepress/theme-default'
+```ts title=".vuepress/configs/sidebar.ts"
+import type { SidebarOptions } from '@vuepress/theme-default'
 
 //将这一段导航定义为：sidebarA
-export const sidebarA: SidebarConfig = {
+export const sidebarA: SidebarOptions = [
     //原先侧边栏config的配置复制过来
-    '/guide/': [
-        {
-          text: '指南',
-          children: [
-            '/guide/README.md', 
-            '/guide/getting-started.md', 
-            '/guide/configuration.md', 
-            '/guide/page.md',
-            '/guide/markdown.md',
-            '/guide/assets.md',
-            '/guide/beautification.md', 
-          ],
-          collapsible: true, //折叠开关
-        },
+    {
+      text: '介绍',
+      link: '/guide/',
+      children: [
+        '/guide/', 
       ],
-}
+    },
+    {
+      text: '基础配置',
+      link: '/guide/',
+      children: [
+        '/guide/getting-started', 
+        '/guide/configuration', 
+        '/guide/page',
+        '/guide/frontmatter',
+      ],
+    },
+]
 ```
 
 最后我们回到 `config.ts` 里去引用一下就OK了
 
-```ts{5-6}
+```ts{5-6} title=".vuepress/config.ts"
 import { sidebarA } from './configs/index.js'
 
 export default {
@@ -398,8 +353,17 @@ export default {
 }
 ```
 
-同样的我们还可以进行导航栏的简化，这里就不演示了
+同样的我们还可以进行导航栏的简化
 
+
+```ts title=".vuepress/configs/nav.ts"
+import type { NavbarOptions } from '@vuepress/theme-default'
+
+//将这一段导航定义为：navA
+export const navA: NavbarOptions = [
+    //原先侧边栏config的配置复制过来
+]
+```
 
 
 
@@ -407,13 +371,13 @@ export default {
 
 无论文档还是github项目都会见到这种
 
-![](./vuepress-37.png)
+![](/beautification/02.png)
 
 官网：[https://shields.io/](https://shields.io/)
 
 `serch` 处输入你的github项目链接，选择要生成的徽标，生成后，选择Markdown格式即可
 
-![](./vuepress-38.png)
+![](/beautification/03.png)
 
 ::: tip 说明
 其他徽标：
@@ -481,6 +445,6 @@ export default ({
 ```
 
 
-```路径
+```
 原始路径：node_modules\@vuepress\theme-default\lib\client\components
 ```

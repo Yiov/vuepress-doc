@@ -1,9 +1,7 @@
-import { defineClientConfig } from '@vuepress/client'
-import Progress from './components/Progress.vue'
+import { defineClientConfig } from 'vuepress/client'
 
 export default defineClientConfig({
   enhance({ app, router, siteData }) {
-    app.component('Progress', Progress)
   },
   setup() {},
   rootComponents: [],

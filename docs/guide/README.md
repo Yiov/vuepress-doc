@@ -6,12 +6,10 @@ next:
 
 # 前言
 
-> 最近更新：2023-11-17
+> 最近更新：2024-7-29
 
 ::: danger 注意
 本人已转用 [Vitepress](https://vitepress.yiov.top/) ，可能不会再更新了
-
-rc版比beta版的bug还多，心力憔悴！
 :::
 
 
@@ -36,21 +34,22 @@ VuePress 是一个以 [Markdown](https://zh.wikipedia.org/wiki/Markdown) 为中�
 * 官方V2.0版文档：[https://v2.vuepress.vuejs.org/zh/](https://v2.vuepress.vuejs.org/zh/)
 
 
-![](./vuepress-01.png)
+![](/vuepress.png)
 
 
 
 ## 其他主题
 
-::: tip 说明
-你要是喜欢 [VitePress](https://vitepress.dev/) 这类的，可以使用 [@vuepress-theme-plume](https://pengzhanbo.cn/note/vuepress-theme-plume/) 主题
-:::
 
-* [npmjs社区主题](https://www.npmjs.com/search?q=keywords:vuepress-theme)
+* [Plume主题](https://theme-plume.vuejs.press/)
 
-* [vuepress-theme-reco](http://v2.vuepress-reco.recoluan.com/)
+* [Hope主题](https://theme-hope.vuejs.press/zh/)
+
+* [Reco主题](https://theme-reco.vuejs.press/)
 
 * [vuepress-theme-vdoing](https://doc.xugaoyi.com/)
+
+* [npmjs社区主题](https://www.npmjs.com/search?q=keywords:vuepress-theme)
 
 * [官方主题开发](https://v2.vuepress.vuejs.org/zh/advanced/theme.html)
 

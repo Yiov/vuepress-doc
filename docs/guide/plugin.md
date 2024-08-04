@@ -1,132 +1,128 @@
 # 插件
 
-> 最近更新：2023-11-17
+> 最近更新：2024-7-29
 
 
 
 ## Markdown高亮
 
-使用内置插件 `Prism.js` 来为 Markdown 代码块启用高亮
+默认使用内置插件 [Prism.js](https://ecosystem.vuejs.press/zh/plugins/markdown/prismjs.html) 来为 Markdown 代码块启用高亮
 
 
-::: danger 注意
-不用另外装和配置，已经内置了除非你要改动，你就需要重新安装
-:::
+而我，因为使用的 vscode 是 [shiki](https://ecosystem.vuejs.press/zh/plugins/markdown/shiki.html) ，我就安装它演示一下
 
 :::: code-group
 ::: code-group-item pnpm
 ```sh
-pnpm add -D @vuepress/plugin-prismjs@next
+pnpm add -D @vuepress/plugin-shiki@next
 ```
 :::
 ::: code-group-item yarn
 ```sh
-yarn add -D @vuepress/plugin-prismjs@next
+yarn add -D @vuepress/plugin-shiki@next
 ```
 :::
 ::: code-group-item npm
 ```sh
-npm i -D @vuepress/plugin-prismjs@next
+npm i -D @vuepress/plugin-shiki@next
 ```
 :::
 ::::
 
 
 ```ts{1,5-8}
-import { prismjsPlugin } from '@vuepress/plugin-prismjs'
+import { shikiPlugin } from '@vuepress/plugin-shiki'
 
-export default {
+export default defineUserConfig ({
   plugins: [
     //markdown代码高亮配置
-    prismjsPlugin({
-      preloadLanguages:['markdown', 'jsdoc', 'yaml']
+    shikiPlugin({
+      langs: ['ts', 'json', 'vue', 'md', 'bash', 'diff'],
     }),
   ],
-}
+})
 ```
 
-::: warning 注意
-在生产和构建时候会 `提示插件已经被使用多次` ，是因为已经内置了，你再装一个插件
-
-默认使用你安装的，不影响打包
-:::
+可以根据自己喜好 [更换主题](https://shiki.tmrs.site/themes)
 
 
+```ts {8}
+import { shikiPlugin } from '@vuepress/plugin-shiki'
 
-
-
-## 站外链接文字
-
-默认主题中，我们复制站外链接文字会出现多余的A11y文字
-
-::: tip 比如
-[Github](https://github.com/) 复制出来是 `GitHub open in new window`
-
-怎么删除后面这个open in new window呢
-:::
-
-我们需要安装插件后进行配置，安装
-
-:::: code-group
-::: code-group-item pnpm
-```sh
-pnpm add -D @vuepress/plugin-external-link-icon@next
-```
-:::
-::: code-group-item yarn
-```sh
-yarn add -D @vuepress/plugin-external-link-icon@next
-```
-:::
-::: code-group-item npm
-```sh
-npm i -D @vuepress/plugin-external-link-icon@next
-```
-:::
-::::
-
-
-::: tip 说明
-引号内留空就可以了，除非你想个性化
-:::
-
-```ts{1,5-14}
-import { externalLinkIconPlugin } from '@vuepress/plugin-external-link-icon'
-
-export default {
+export default defineUserConfig ({
   plugins: [
-    externalLinkIconPlugin({
-      locales: {
-        '/': {
-          openInNewWindow: '在新窗口打开，不想要文字删掉留空即可',
-        },
-        '/en/': {
-          openInNewWindow: 'open in new window',
-        },
-      },
+    //markdown代码高亮配置
+    shikiPlugin({
+      langs: ['ts', 'json', 'vue', 'md', 'bash', 'diff'],
+      theme:'one-dark-pro', //主题
+      // 双主题
+      // themes: {
+      //       light: 'one-light',
+      //       dark: 'one-dark-pro',
+      // },
     }),
   ],
-}
+})
 ```
 
-::: warning 注意
-在生产和构建时候会 `提示插件已经被使用多次` ，是因为已经内置了，你再装一个插件
 
-默认使用你安装的，不影响打包
-:::
+行高亮和行号显示和默认的使用方式一样，但是shiki还有其他功能
 
+```ts {8}
+import { shikiPlugin } from '@vuepress/plugin-shiki'
 
-另外站外链接图标不想要，可以用Frontmatter关闭当前页
-
-::: tip 说明
-所有页面都关闭，可参考 [官方文档](https://v2.vuepress.vuejs.org/zh/reference/default-theme/config.html#themeplugins-externallinkicon) ，但我并未生效
-:::
-
-```md
----
-externalLinkIcon: false
----
+export default defineUserConfig ({
+  plugins: [
+    //markdown代码高亮配置
+    shikiPlugin({
+      notationDiff:true, //启用差异标记
+      notationFocus:true , //启用聚焦标记
+      notationHighlight:true, //启用高亮标记
+      notationErrorLevel:true, //启用错误标记
+      notationWordHighlight:true, //启用词高亮标记
+    }),
+  ],
+})
 ```
+
+输入：
+
+````md
+```ts
+console.log('hewwo') // [\!code --]
+console.log('hello') // [\!code ++]
+
+console.log('Focused')  // [\!code focus]
+
+console.log('Highlighted') // [\!code highlight]
+
+console.warn('Warning') // [\!code warning]
+console.error('Error') // [\!code error]
+
+// [\!code word:Hello]
+const message = 'Hello World'
+console.log(message) // prints Hello World
+```
+````
+
+输出：
+
+```ts{4}
+console.log('hewwo') // [!code --]
+console.log('hello') // [!code ++]
+
+console.log('Focused')  // [!code focus]
+
+console.log('Highlighted') // [!code highlight]
+
+console.warn('Warning') // [!code warning]
+console.error('Error') // [!code error]
+
+// [!code word:Hello]
+const message = 'Hello World'
+console.log(message) // prints Hello World
+```
+
 
 
 
@@ -158,13 +154,13 @@ npm i -D @vuepress/plugin-google-analytics@next
 ```ts
 import { googleAnalyticsPlugin } from '@vuepress/plugin-google-analytics'
 
-export default {
+export default defineUserConfig ({
   plugins: [
     googleAnalyticsPlugin({
       id: 'G-XXXXXXXXXX', //跟踪ID
     }),
   ],
-}
+})
 ```
 
 谷歌分析官网：[https://analytics.google.com/](https://analytics.google.com/)
@@ -175,23 +171,23 @@ export default {
 没有账号的注册账号，要翻墙哦
 :::
 
-![](./vuepress-41.png)
+![](/plugin/01.png)
 
 信息随便填，后面都可以改
 
-![](./vuepress-42.png)
+![](/plugin/02.png)
 
 创建完成，点网站，输入你自己的网站
 
-![](./vuepress-43.png)
+![](/plugin/03.png)
 
-![](./vuepress-44.png)
+![](/plugin/04.png)
 
 
 
 衡量ID就是跟踪ID，我们填入 `config.ts`
 
-![](./vuepress-45.png)
+![](/plugin/05.png)
 
 如果不想要了，在账户设置里删除账户
 
@@ -199,7 +195,7 @@ export default {
 删除了在回收站里，要35天后永久删除
 :::
 
-![](./vuepress-46.png)
+![](/plugin/06.png)
 
 
 
@@ -209,26 +205,23 @@ export default {
 
 ## 复制代码块
 
-默认主题没有添加这个功能，我们可以用第三方插件
+默认主题在移动端没有添加这个功能，可以使用 [官方插件：copy-code](https://ecosystem.vuejs.press/zh/plugins/features/copy-code.html)
 
-官网：[https://plugin-copy-code2.vuejs.press/zh/](https://plugin-copy-code2.vuejs.press/zh/)
-
-安装
 
 :::: code-group
 ::: code-group-item pnpm
 ```sh
-pnpm add -D vuepress-plugin-copy-code2
+pnpm add -D @vuepress/plugin-copy-code@next
 ```
 :::
 ::: code-group-item yarn
 ```sh
-yarn add -D vuepress-plugin-copy-code2
+yarn add -D @vuepress/plugin-copy-code@next
 ```
 :::
 ::: code-group-item npm
 ```sh
-npm i -D vuepress-plugin-copy-code2
+npm i -D @vuepress/plugin-copy-code@next
 ```
 :::
 ::::
@@ -237,24 +230,31 @@ npm i -D vuepress-plugin-copy-code2
 
 
 
-```ts{1,5-7}
-import { copyCodePlugin } from 'vuepress-plugin-copy-code2'
+```ts{1,5-8}
+import { copyCodePlugin } from '@vuepress/plugin-copy-code'
 
-export default {
+export default defineUserConfig ({
   plugins: [
+    //===== copy-code配置 =====//
     copyCodePlugin({
       showInMobile: true, //是否显示在移动端
     }),
   ],
-};
+})
 ```
 
-![](./vuepress-100.png)
+::: details warning plugin @vuepress/plugin-copy-code has been used multiple times, only the last one will take effect
+官方虽然内置了，但是没有启用移动端，只能安装后配置
+
+只是提醒你已经安装过了，不影响你使用
+:::
+
+![](/plugin/07.png)
 
 
 ## 更多插件
 
-* VuePress 插件市场：[https://marketplace.vuejs.press/zh/](https://marketplace.vuejs.press/zh/) 丨 [文档版](https://github.com/vuepress/awesome-vuepress/blob/main/v2.md)
+* [VuePress生态系统 - 插件](https://ecosystem.vuejs.press/zh/plugins/)
 
 
 

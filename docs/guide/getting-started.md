@@ -6,38 +6,43 @@ prev:
 
 # 快速上手
 
-> 最近更新：2023-11-17
+> 最近更新：2024-7-29
 
 
 
 ::: danger 注意
 本人已转用 [Vitepress](https://vitepress.yiov.top/) ，可能不会再更新了
-
-rc版比beta版的bug还多，心力憔悴！
 :::
 
 
-## 前期准备
+## 在线体验
 
-### 工具
+免安装体验及调试 StackBlitz：[https://stackblitz.com/fork/vuepress](https://stackblitz.com/fork/vuepress)
+
+
+
+## 前期工作
+
 
 ::: tip 说明
 已经安装 或者 熟练了，可以不用看此步骤
 :::
 
-* 必装：[安装nodejs](https://yiov.top/website/nodejs.html)
+::: details 必备工具
+
+* 必装：[nodejs](https://yiov.top/website/nodejs.html)
 
 
-* 建议安装：[安装vscode](https://yiov.top/website/VSCode.html)
+* 建议安装：[VScode](https://yiov.top/website/VSCode.html)
 
 
-* 可选安装：[安装git](https://yiov.top/website/git.html)
+* 可选安装：[git](https://yiov.top/website/pages/git.html)
+:::
 
 
+::::: details pnpm
 
-### pnpm
-
-通过 npm 安装 [yarn](https://www.yarnpkg.cn/) 或者 新出的[pnpm](https://pnpm.io/zh/)
+安装好nodejs后，通过 npm 安装 [pnpm](https://pnpm.io/zh/) 或 [yarn](https://www.yarnpkg.cn/)
 
 
 :::: code-group
@@ -59,15 +64,16 @@ yarn -v
 :::
 ::::
 
-![](./vuepress-02.png)
+![](/getting-started/01.png)
+
+:::::
 
 
-
-### 创建目录
+:::: details 创建文件目录
 
 win键+R键，调出命令运行框，输入 `cmd`
 
-![](./vuepress-03.png)
+![](/getting-started/02.png)
 
 
 先进入任意盘符，比如 F 盘
@@ -77,103 +83,274 @@ win键+R键，调出命令运行框，输入 `cmd`
 f:
 ```
 
-![](./vuepress-04.png)
-
+![](/getting-started/03.png)
 
 再创建文件夹名
 
-
 ```sh
-#目录可以自定义
-mkdir vuepress
-
-#目录和上面保持一致
-cd vuepress
+#创建目录并进入，也可以自定义目录名
+mkdir vuepress && cd vuepress
 ```
 
 ::: tip 说明
 这样我的目录路径为 `F:\vuepress`
 
-觉得麻烦的可以直接电脑创建
+不习惯的，也可以直接电脑创建
 :::
 
+![](/getting-started/04.png)
+
+::::
 
 
-
-![](./vuepress-05.png)
-
-
-
-
-## 开始安装
+## 安装
 
 ::: tip 说明
-我们在目录上方的地址栏输入 `cmd` 可以快捷打开
+如果你是首次接触，推荐你使用 [一键安装](#一键安装) 
+
+你已经够熟练了，直接使用 [手动安装](#手动安装)
 :::
+
+## 一键安装
+
+
+通过 [create-vuepress](https://www.npmjs.com/package/create-vuepress) 直接创建项目模板
+
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm create vuepress vuepress-starter
+```
+:::
+::: code-group-item yarn
+```sh
+yarn create vuepress vuepress-starter
+```
+:::
+::: code-group-item npm
+```sh
+npm init vuepress vuepress-starter
+```
+:::
+::::
+
+用键盘 `方向键↓` 选择 简体中文，回车
+
+![](/getting-started/05.png)
+
+包管理器就选择你安装时的包，我是pnpm，回车
+
+![](/getting-started/06.png)
+
+打包器用默认的vite即可，回车
+
+![](/getting-started/07.png)
+
+项目类型，我用文档演示，用键盘 `方向键↓` 选择 `docs`
+
+![](/getting-started/08.png)
+
+应用名称、版本号、描述也可以之后再改，直接回车
+
+默认协议MIT，默认创建工作流，回车
+
+![](/getting-started/09.png)
+
+等下载安装完成，问是否启动，输入 `y` 回车
+
+::: details WARN  Issues with peer dependencies found
+这里提示依赖关系需要不对等，不急，我们等会处理
+:::
+
+![](/getting-started/10.png)
+
+
+这里自动生成了一个本地8080端口的网页，复制到浏览器打开
+
+![](/getting-started/11.png)
+
+
+::::: details 打开网页一片空白，什么都没有
+
+这就是刚才提示依赖不对等造成的，我们`ctrl+c` ，输入 `y` 回车结束终端
+
+![](/getting-started/12.png)
+
+进入自动创建的vuepress-starter文件夹
+
+```sh
+cd vuepress-starter
+```
+
+使用 pnpm dlx 升级vuepress
+
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm dlx vp-update
+```
+:::
+::: code-group-item yarn
+```sh
+yarn dlx vp-update
+```
+:::
+::: code-group-item npm
+```sh
+npx vp-update
+```
+:::
+::::
+
+![](/getting-started/13.png)
+
+最后手动启动看看，已经可以查看网页了
+
+
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm docs:dev
+```
+:::
+::: code-group-item yarn
+```sh
+yarn dlx vp-update
+```
+:::
+::: code-group-item npm
+```sh
+npx vp-update
+```
+:::
+::::
+
+
+![](/getting-started/14.png)
+
+
+:::::
+
+![](/getting-started/15.png)
+
+
+
+
+
+
+## 手动安装
+
+
+cmd不小心关了，在目录上方的地址栏输入 `cmd` 回车，可以快捷打开
+
+![](/getting-started/16.png)
+
 
 ### 初始化
 
 :::: code-group
 ::: code-group-item pnpm
 ```sh
-#初始化pnpm
 pnpm init
 ```
 :::
 ::: code-group-item yarn
 ```sh
-#初始化yarn 一路回车
 yarn init
-
-#或者用一键y命令
-#yarn init -y
 ```
 :::
 ::: code-group-item npm
 ```sh
-#初始化npm
 npm init
 ```
 :::
 ::::
 
+![](/getting-started/17.png)
 
-![](./vuepress-06.png)
 
 
 
 ### 安装依赖
 
-::: tip vite说明
-从v2版本开始，默认使用的是 [Vite](https://vitejs.dev/) 打包工具，[webpack](https://webpack.js.org/)编译慢，不建议使用
-:::
-
 
 :::: code-group
 ::: code-group-item pnpm
 ```sh
-pnpm add -D vuepress@next @vuepress/client@next vue
+# 安装 vuepress 和 vue
+pnpm add -D vuepress@next vue
+# 安装打包工具和主题
+pnpm add -D @vuepress/bundler-vite@next @vuepress/theme-default@next
 ```
 :::
 ::: code-group-item yarn
 ```sh
+# 安装 vuepress
 yarn add -D vuepress@next
+# 安装打包工具和主题
+yarn add -D @vuepress/bundler-vite@next @vuepress/theme-default@next
 ```
 :::
 ::: code-group-item npm
 ```sh
+# 安装 vuepress
 npm install -D vuepress@next
+# 安装打包工具和主题
+npm install -D @vuepress/bundler-vite@next @vuepress/theme-default@next
 ```
 :::
 ::::
 
 
-![](./vuepress-07.png)
+![](/getting-started/18.png)
+
+![](/getting-started/19.png)
+
+### 创建目录
+
+```sh
+# 创建 docs 目录和 docs/.vuepress 目录
+mkdir docs
+mkdir docs\.vuepress
+```
+
+![](/getting-started/20.png)
+
+
+
+
+### 创建配置文件
+
+在 docs/.vuepress/ 目录中，创建一个空的配置文件
+
+```sh
+echo >docs/.vuepress/config.ts
+```
+
+![](/getting-started/21.png)
+
+
+
+右键记事本打开，复制下面代码，粘贴到 `config.ts` 中保存
+
+```ts
+import { viteBundler } from '@vuepress/bundler-vite'
+import { defaultTheme } from '@vuepress/theme-default'
+import { defineUserConfig } from 'vuepress'
+
+export default defineUserConfig({
+  bundler: viteBundler(),
+  theme: defaultTheme(),
+})
+```
+
+![](/getting-started/22.png)
+
 
 
 ### 脚本命令
 
-在 `package.json` 中添加一些 scripts 命令，保存
+在 `package.json` 中更改 scripts 命令，保存
 
 ```json{2-3}
   "scripts": {
@@ -188,7 +365,9 @@ npm install -D vuepress@next
 执行命令 `docs:build`，就会运行 `vuepress build docs`
 :::
 
-![](./vuepress-08.png)
+
+![](/getting-started/23.png)
+
 
 
 ### git忽略项
@@ -210,8 +389,8 @@ echo .cache >> .gitignore
 
 echo dist >> .gitignore
 ```
-![](./vuepress-09.png)
 
+![](/getting-started/24.png)
 
 ::: details Github上传未忽略dist文件夹
 原因：vscode输入命令导致编码错误
@@ -240,19 +419,17 @@ dist
 创建你的第一篇文档
 
 ```sh
-mkdir docs
 echo # Hello VuePress > docs/README.md
 ```
 
-
-![](./vuepress-10.png)
-
+![](/getting-started/25.png)
 
 
-## 本地启动
 
-在本地启动服务器，进入开发环境来搭建文档网站。本次执行的其实就是我们在 [脚本命令](#脚本命令) 中的命令
 
+### 本地启动
+
+执行在 [脚本命令](#脚本命令) 中的命令，进入开发环境来搭建文档网站
 
 :::: code-group
 ::: code-group-item pnpm
@@ -276,18 +453,16 @@ npm docs:dev
 `ctrl+c` 即可退出开发模式
 :::
 
+![](/getting-started/26.png)
 
-VuePress会在本地启动一个8080端口的热重载开发服务器，即当你修改文件时，浏览器中的内容也会自动更新
 
-`http://localhost:8080`
+本地启动了一个 `8080` 端口的热重载开发服务器
 
-![](./vuepress-11.png)
-
-打开网址成功看到页面，就说明我们的vuepress就搭建完成了
+复制 `http://localhost:8080` 网址到浏览器打开，看到页面就说明vuepress就搭建完成了
 
 ::: warning 注意
 接下来我们可以关闭cmd，全程用vscode了
 :::
 
-![](./vuepress-12.png)
 
+![](/getting-started/27.png)

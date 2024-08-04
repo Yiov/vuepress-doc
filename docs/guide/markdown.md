@@ -6,7 +6,7 @@ prev:
 ---
   # Markdown
 
-> 最近更新：2023-11-17
+> 最近更新：2024-7-29
 
 
 如果你还不了解 Markdown ，[请看我整理的Markdown教程](https://yiov.top/computer/markdown.html)
@@ -51,10 +51,10 @@ export default {
 └─ package.json
 ```
 
-以本篇文档为例，这篇文档是存放在guide目录下的 `markdown.md`
+以本篇文档为例，路径是： `guid/markdown.md`
 
 ::: tip 说明
-那么以它为参考，其他文件都是与markdown.md处于相对位置
+那么以它为参考，其他文件都是与 `markdown.md` 处于相对位置
 
 `./` 表示同级
 
@@ -66,16 +66,16 @@ export default {
 
 ```md
 <!-- 相对路径 -->
-[指南首页](./README.md)
+[前言](./README.md)
 
-[首页](../README.md)
+[网站首页](../README.md)
 
 [package.json](../../package.json)
 
 <!-- 绝对路径 -->
-[指南首页](/README.md)
+[前言](/README.md)
 
-[首页](/docs/README.md)
+[网站首页](/docs/README.md)
 
 <!-- URL -->
 [GitHub](https://github.com)
@@ -143,7 +143,7 @@ markdown: {
 
 ### 图片引用
 
-一般情况下，我们推荐你使用相对路径来引用图片，因为我们经常把图片和README.md放在一起
+如果你的图片和README.md放在一起，那么使用相对路径
 
 ```md
 <!-- 就相当于与markdown.md在同一目录 -->
@@ -312,30 +312,48 @@ export default defineUserConfig({
 
 
 
+## shiki
+
+
+:::: code-group
+::: code-group-item pnpm
+```sh
+pnpm add -D @vuepress/plugin-shiki@next
+```
+:::
+::: code-group-item yarn
+```sh
+yarn add -D @vuepress/plugin-shiki@next
+```
+:::
+::: code-group-item npm
+```sh
+npm i -D @vuepress/plugin-shiki@next
+```
+:::
+::::
 
 
 
+```ts
+import { shikiPlugin } from '@vuepress/plugin-shiki'
 
-
-
+export default {
+  plugins: [
+    shikiPlugin({
+      // 配置项
+      langs: ['ts', 'json', 'vue', 'md', 'bash', 'diff'],
+    }),
+  ],
+}
+```
 
 
 
 
 ## 代码块
 
-::: warning 注意
-如无必要，无需更改配置，不填入即可！
-:::
 
-```ts
-markdown: {
-    //code:false, //禁用代码块
-    code: {
-      //这里是配置项
-    },
-}
-```
 
 ### 行高亮
 
@@ -368,17 +386,7 @@ export default {
 }
 ```
 
-::: warning 注意
-如无必要，无需更改配置，不填入即可！
-:::
 
-```ts
-markdown: {
-  code: {
-      highlightLines:false, //禁用代码高亮
-  },
-}
-```
 
 
 ### 行号显示
@@ -417,16 +425,42 @@ markdown: {
 ```
 
 
-::: warning 注意
-如无必要，无需更改配置，不填入即可！
-:::
 
-```ts
-markdown: {
-  code: {
-      lineNumbers:false, //禁用行号
-  },
-}
+### 代码标题
+
+你可以在代码块添加一个 `title` 键值对来为代码块设置标题
+
+输入：
+
+````md
+```ts title=".vuepress/config.ts"
+import { defaultTheme } from '@vuepress/theme-default'
+import { defineUserConfig } from 'vuepress'
+
+export default defineUserConfig({
+  title: '你好， VuePress',
+
+  theme: defaultTheme({
+    logo: 'https://vuejs.org/images/logo.png',
+  }),
+})
+```
+````
+
+
+输出：
+
+```ts title=".vuepress/config.ts"
+import { defaultTheme } from '@vuepress/theme-default'
+import { defineUserConfig } from 'vuepress'
+
+export default defineUserConfig({
+  title: '你好， VuePress',
+
+  theme: defaultTheme({
+    logo: 'https://vuejs.org/images/logo.png',
+  }),
+})
 ```
 
 
@@ -493,7 +527,7 @@ import { getDirname, path } from '@vuepress/utils'
 
 const __dirname = getDirname(import.meta.url)
 
-export default {
+export default defineUserConfig ({
   markdown: {
     importCode: {
       handleImportPath: (str) =>
@@ -501,7 +535,7 @@ export default {
         str.replace(/^@vuepress/, path.resolve(__dirname, './')),
     },
   },
-}
+}),
 ```
 
 

@@ -1,6 +1,6 @@
 # 静态部署
 
-> 最近更新：2023-11-17
+> 最近更新：2024-7-29
 
 主要讲一下GitHub，其他的方式都大同小异，[更多部署方式可以参考官方文档](https://v2.vuepress.vuejs.org/zh/guide/deployment.html)
 
@@ -19,10 +19,10 @@ base必须配置，否则打包会丢失css样式！！
 我们根据自己的需求，选择相应的的配置
 
 ```ts{2-3}
-export default {
+export default defineUserConfig ({
   base: '/', //网站部署的路径，默认根目录
   // base: '/vuepress/', //网站部署到github的vuepress这个仓库里
-}
+}),
 ```
 
 
@@ -32,13 +32,13 @@ export default {
 
 
 ```ts{2,6}
-export default {
+export default defineUserConfig ({
   base: '/vuepress/', //网站部署在vuepress仓库
 
   head: [['link', 
   //favicon图标也要改成仓库名路径，否则丢失
   { rel: 'icon', href: '/vuepress/images/logo.png' },]],
-}
+}),
 ```
 
 
@@ -61,7 +61,7 @@ export default {
 ```
 
 ::: tip 注意
-.github 与 docs为同级目录，有兴趣[GitHub Actions 深入了解](https://docs.github.com/zh/actions)
+.github 与 docs为同级目录，有兴趣 [GitHub Actions 深入了解](https://docs.github.com/zh/actions)
 :::
 
 
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
           fetch-depth: 0
@@ -104,10 +104,10 @@ jobs:
           run_install: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           # 选择要使用的 node 版本
-          node-version: 18
+          node-version: 20
           # 缓存 pnpm 依赖
           cache: pnpm
 
@@ -118,7 +118,7 @@ jobs:
       # 查看 workflow 的文档来获取更多信息
       # @see https://github.com/crazy-max/ghaction-github-pages
       - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v2
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           # 部署到 gh-pages 分支
           target_branch: gh-pages
@@ -165,10 +165,10 @@ npm docs:build
 
 打包完成后，在 `docs/.vuepress/dist` 目录，将`dist` 文件夹的所有文件上传到网站或者仓库即可
 
-![](./vuepress-39.png)
+![](/assets/01.png)
 
 
 手动上传到github的，需要在设置-page里把分支改成main，默认root，保存等创建成功后即可获得访问链接
 
-![](./vuepress-40.png)
+![](/assets/02.png)
 
