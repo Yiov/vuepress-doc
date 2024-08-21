@@ -13,12 +13,12 @@
   "packageManager": "pnpm@8.6.10+sha1.98fe2755061026799bfa30e7dc8d6d48e9c3edf0",
   "devDependencies": {
     "@vuepress/bundler-vite": "2.0.0-rc.14",
-    "@vuepress/plugin-copy-code": "2.0.0-rc.40",
-    "@vuepress/plugin-docsearch": "2.0.0-rc.40",
-    "@vuepress/plugin-shiki": "2.0.0-rc.40",
+    "@vuepress/plugin-copy-code": "2.0.0-rc.41",
+    "@vuepress/plugin-docsearch": "2.0.0-rc.41",
+    "@vuepress/plugin-shiki": "2.0.0-rc.41",
     "@vuepress/theme-default": "2.0.0-rc.40",
     "@vuepress/utils": "2.0.0-rc.14",
-    "vue": "^3.4.35",
+    "vue": "^3.4.38",
     "vuepress": "2.0.0-rc.14"
   }
 }

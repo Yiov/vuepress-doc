@@ -58,6 +58,7 @@ export default defineUserConfig({
     shikiPlugin({
       // 配置项
       langs: ['ts', 'json', 'vue', 'md', 'bash', 'diff'],
+      highlightLines: true,
       theme: 'one-dark-pro', //主题
       notationDiff: true, //启用差异标记
       notationFocus: true, //启用聚焦标记
